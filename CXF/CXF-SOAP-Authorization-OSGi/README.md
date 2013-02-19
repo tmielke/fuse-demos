@@ -37,8 +37,7 @@ Before building and running this example you need:
 ## Building the Example
 To build the example:
 
-1. Change your working directory to the `examples/secure-soap` directory.
-2. Run `mvn clean install` to build the example.
+Run `mvn clean install` to build the example.
 
 
 ## Running the Example
@@ -46,7 +45,7 @@ To run the example:
 
 1. Start Fuse ESB Enterprise 7 by running `bin/fuseesb` (on Linux) or `bin\fuseesb.bat` (on Windows).
 2. In the Fuse ESB console, enter the following command:
-        osgi:install -s fab:mvn:org.fusesource.examples/secure-soap/7.1.0.fuse-047
+        osgi:install -s fab:mvn:org.fusesource.examples/secure-soap-authorization/7.1.0.fuse-047
 3. Verify etc/users.properties from the Fuse ESB installation contains the following 'admin' user configured:
    admin=admin
 
@@ -93,8 +92,7 @@ After you deployed this example, you will see the `HelloWorldSecurity` service a
 In this example project, we also developed a Java client which can perform a few HTTP requests to test our Web services. We
 configured the exec-java-plugin in Maven to allow us to run the Java client code with a simple Maven command:
 
-1. Change to the `<esb_home>/examples/secure-soap` directory.
-2. Run the following command:
+Run the following command:
 
         mvn compile exec:java
 
