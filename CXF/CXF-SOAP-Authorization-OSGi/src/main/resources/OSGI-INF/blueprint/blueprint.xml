@@ -60,7 +60,9 @@
         </jaxws:outInterceptors>
  
         <!--
-          TODO: Add a description about the purpose of this extra property
+          We set ws-security.validate.token=false as we leave the authentication to
+          the JAASLoginInterceptor. When using default value true the WSS4JInInterceptor will
+	  try to authenticate the user.
         -->
         <jaxws:properties>
             <entry key="ws-security.validate.token" value="false"/>
