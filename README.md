@@ -1,4 +1,4 @@
 fuse-demos
 ==========
 
-Collection of demos for FuseSource products
+This repository contains a collection of demos for FuseSource products.
