@@ -78,6 +78,12 @@
     -->
     <bean id="authenticationInterceptor" class="org.apache.cxf.interceptor.security.JAASLoginInterceptor">
        <property name="contextName" value="karaf"/>
+       <!-- These two props are needed when authenticating against a JAAS system that uses
+            different types of security Principals as done by Karaf. 
+            See http://cxf.apache.org/docs/security.html for more info.
+       -->
+       <property name="roleClassifier" value="RolePrincipal"/>
+       <property name="roleClassifierType" value="classname"/>
     </bean>
 
      <!-- authorization against a fixed operation name to role name mapping -->
