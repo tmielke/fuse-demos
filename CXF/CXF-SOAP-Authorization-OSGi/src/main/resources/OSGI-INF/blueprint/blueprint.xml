@@ -88,11 +88,21 @@
 
      <!-- authorization against a fixed operation name to role name mapping -->
     <bean id="authorizationInterceptor" class="org.apache.cxf.interceptor.security.SimpleAuthorizingInterceptor">
+      <!-- The methodRolesMap configuration lists the WSDL operations explicitly 
+	   and names the required roles for invoking these operations. Note that
+	   wildcards are not supported, the operation names have to match exactly.  
+      -->
       <property name="methodRolesMap">
 	<map>
 	  <entry key="sayHi" value="admin"/>
 	</map>
       </property>
+      <!-- In order to declare default roles that are required for any WSDL 
+	   operation that is not explicitly listed in the methodRolesMap, one can
+	   use the globalRoles property and list the roles that are required by 
+	   default (space separated).
+      -->
+      <property name="globalRoles" value="root web"/>
     </bean>
 
 </blueprint>
