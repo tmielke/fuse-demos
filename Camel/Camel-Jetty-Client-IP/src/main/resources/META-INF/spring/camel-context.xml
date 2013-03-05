@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+
+  <bean id="SimpleProcessor" class="org.apache.camel.test.SimpleProcessor"/>
+
+  <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+    <route>
+      <from uri="jetty:http://localhost:9000/JettyHeaderTest"/>
+      <bean ref="SimpleProcessor" />
+      <to uri="log:org.fusesource.test.camel-jetty-test?level=INFO&amp;showAll=true"/>
+    </route>
+  </camelContext>
+</beans>
