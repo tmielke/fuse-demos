@@ -41,11 +41,11 @@ Simply run mvn test-compile to build the project
 There are two ways to run the demo.
 
 ###1) JUnit test
-simply run mvn test and observe the logging output
+Simply run mvn test and observe the logging output
 
 
 ###2) Camel Maven plugin
-Simply run mvn camel:run and wait for the route to be started.
+Run mvn camel:run and wait for the route to be started.
 Then open your favorite browser and navigate to
   http://localhost:9000/JettyHeaderTest
 
