@@ -11,7 +11,7 @@ object. This contains the complete client address information.
 The Camel route definition in src/main/resources/META-INF/spring/camel-context.xml
 is very simple:
 
-  <bean id="SimpleProcessor" class="org.apache.camel.test.SimpleProcessor"/>
+    <bean id="SimpleProcessor" class="org.apache.camel.test.SimpleProcessor"/>
 
     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
       <route>
@@ -25,8 +25,8 @@ The SimpleProcessor in src/main/java/org/apache/camel/test/SimpleProcessor
 extracts the client's IP address using these few lines of code:
 
     HttpServletRequest req = exchange.getIn().getBody(HttpServletRequest.class);
-    String remoteAddr = ((org.eclipse.jetty.server.Request) req).getConnection().getEndPoint().getRemoteAddr(); 
-    int remotePort = ((org.eclipse.jetty.server.Request) req).getConnection().getEndPoint().getRemotePort(); 
+    String remoteAddr = req.getRemoteAddr();
+    int remotePort = req.getRemotePort();
     LOG.info("Client called from " + remoteAddr + ":" + remotePort);
 
 Finally the JUnit test class is located in 

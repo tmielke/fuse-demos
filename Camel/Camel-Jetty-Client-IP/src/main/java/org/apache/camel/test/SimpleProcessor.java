@@ -6,8 +6,6 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.Processor;
 
-import org.eclipse.jetty.server.Request;
-
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -33,8 +31,8 @@ public class SimpleProcessor implements Processor{
         // the remote client address.
         HttpServletRequest req = exchange.getIn().getBody(HttpServletRequest.class);
         if (req != null) {
-            String remoteAddr = ((Request) req).getConnection().getEndPoint().getRemoteAddr(); 
-            int remotePort = ((Request) req).getConnection().getEndPoint().getRemotePort(); 
+            String remoteAddr = req.getRemoteAddr();
+            int remotePort = req.getRemotePort();
             LOG.info("Client called from " + remoteAddr + ":" + remotePort);
 
             // generate a reply message
