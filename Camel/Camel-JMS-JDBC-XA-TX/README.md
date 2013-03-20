@@ -73,17 +73,6 @@ accordingly.
   - CREATE TABLE Users (firstname VARCHAR(50) NOT NULL, lastname VARCHAR(50), login VARCHAR(12), password VARCHAR(20), PRIMARY KEY (login)) ;
   - INSERT INTO Users values ('Joe', 'Doe', 'jdoe', 'secret') ;
 
-- Edit etc/activemq-broker.xml 
-  - add namespace def
-    xmlns:blueprint="http://www.osgi.org/xmlns/blueprint/v1.0.0"
-  - to <broker> bean add the property
-    blueprint:id="broker"
-  - add line 
-    <reference id="recoverableTxManager" interface="org.apache.geronimo.transaction.manager.RecoverableTransactionManager" availability="mandatory" />
-  - change resourceManager bean and replace tx manager with
-    <property name="transactionManager" ref="recoverableTxManager" />
-
-
 
 ## COMPILING
 Run 
@@ -109,7 +98,7 @@ the process called `org.apache.karaf.main.Main`.
 #### Testing the route using camel-sql component:
 On the MBeans tab, navigate to `org.apache.activemq` &rarr; `fusemq` &rarr; `Queue` &rarr; `SQL_IN`.  
 Using the `sendTextMessage(String body, String user, String password)` operation send a message.
-For the first argument use the string "Sam, Smith, ssmith, secret".  For the second and third password, 
+For the first argument use the string `Sam, Smith, ssmith, secret`.  For the second and third password, 
 use the username admin and password admin.
 Observe ServiceMix log file and verify that the message got routed to JMS destination SQL_OUT.
 If you click the browse() operation for the queue SQL_OUT, the message text should say
@@ -119,7 +108,7 @@ Check the JDBC database and verify that this record got written into the Users t
 #### Testing the route using camel-jdbc component:
 On the MBeans tab, navigate to `org.apache.activemq` &rarr; `fusemq` &rarr; `Queue` &rarr; `JDBC_IN`.
 Using the `sendTextMessage(String body, String user, String password)` operation send a message.
-For the first argument use the string "INSERT INTO Users VALUES('Jon', 'Jackson', 'jjackson', 'secret')".  
+For the first argument use the string `INSERT INTO Users VALUES('Jon', 'Jackson', 'jjackson', 'secret')`.  
 For the second and third password, use the username admin and password admin.
 Observe ServiceMix log file and verify that all messages got routed to 
 JMS destination JDBC_OUT. 
