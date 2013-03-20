@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<features name="org.apache.servicemix.demo" 
+    xmlns="http://karaf.apache.org/xmlns/features/v1.0.0">
+    <feature version="${project.version}" name="camel-jms-jdbc-xa-demo">
+
+        <!-- Prerequisite bundles -->
+        <bundle>mvn:org.apache.geronimo.components/geronimo-connector/2.2.2</bundle>
+        <bundle>mvn:org.apache.geronimo.specs/geronimo-j2ee-connector_1.5_spec/2.0.0</bundle>
+
+        <!-- JDBC driver classes -->
+        <!-- not used due to ENTESB-633 
+        <bundle>wrap:mvn:org.apache.tomcat/tomcat-jdbc/7.0.37</bundle>
+        <bundle>wrap:mvn:org.apache.tomcat/juli/6.0.36$Bundle-SymbolicName=juli&amp;Bundle-Version=6.0.36&amp;Export-Package=org.apache.juli;version=6.0.36,org.apache.juli.logging;version=6.0.36</bundle>
+        -->
+        <!-- due to ENTESB-633 workaround we also need these bundles -->
+        <bundle>wrap:mvn:mysql/mysql-connector-java/5.1.17</bundle>
+        <bundle>wrap:mvn:org.tranql/tranql-connector/1.7</bundle>
+        <bundle>wrap:mvn:org.tranql/tranql-connector-mysql-common/1.5</bundle>
+
+        <!--  additional Camel features -->
+        <feature>camel-sql</feature>
+        <bundle>mvn:org.apache.camel/camel-jms/${camel.version}</bundle>
+        <bundle>mvn:org.apache.camel/camel-jdbc/${camel.version}</bundle>
+
+        <!-- finally the demo bundles -->
+        <bundle>mvn:${project.groupId}/routing/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/datasource/${project.version}</bundle>
+    </feature>
+</features>

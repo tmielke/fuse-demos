@@ -1,0 +1,137 @@
+<!--
+~ Copyright 2011 FuseSource
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~ http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0">
+
+  <reference id="platformTxManager" interface="org.springframework.transaction.PlatformTransactionManager" availability="mandatory"/>
+  <reference id="transactionManager" interface="javax.transaction.TransactionManager" />
+  <reference id="recoverableTxManager" interface="org.apache.geronimo.transaction.manager.RecoverableTransactionManager" availability="mandatory" />
+
+  <!-- **************************************************************************************** -->
+  <!-- Workaround for bug http://fusesource.com/issues/browse/ENTESB-633
+       This configuration will also enlist a JDBC XA DataSource into Aries tx
+       manager. Once ENTESB-633 is fixed this config should not be needed 
+       anymore. Instead part 2 of the configuration would apply.
+  -->
+  <!-- Sets up a Geronimo JCA connection manager which also supports pooling --> 
+  <bean id="connectionManager" class="org.apache.geronimo.connector.outbound.GenericConnectionManager">
+    <argument index="0">
+      <bean class="org.apache.geronimo.connector.outbound.connectionmanagerconfig.XATransactions">
+    <argument value="true" />
+    <argument value="false" />
+      </bean>
+    </argument>
+    <argument index="1">
+      <!-- http://geronimo.apache.org/maven/server/modules/geronimo-connector/apidocs/org/apache/geronimo/connector/outbound/connectionmanagerconfig/PartitionedPool.html -->
+      <bean class="org.apache.geronimo.connector.outbound.connectionmanagerconfig.PartitionedPool">
+    <argument value="10" />
+    <argument value="0" />
+    <argument value="5000" />
+    <argument value="15" />
+    <argument value="true" />
+    <argument value="false" />
+    <argument value="false" />
+    <argument value="true" />
+    <argument value="false" />
+      </bean>
+    </argument>
+    <argument index="2"><null /></argument>
+    <argument index="3"><null /></argument>
+    <argument index="4" ref="recoverableTxManager" />
+    <argument index="5" value="MySQL-DS" />
+    <argument index="6" ref="classLoader" />
+  </bean>
+
+  <bean id="classLoader" class="org.apache.aries.util.AriesFrameworkUtil" factory-method="getClassLoader">
+    <argument ref="blueprintBundle" />
+  </bean>
+  <service ref="classLoader" auto-export="all-classes" />
+
+   <!-- 
+       Tranql provides the ManagedConnectionFactory but delegates all the work to the JDBC drivers.
+       There are factories for every major JDBC provider at 
+       http://search.maven.org/#search|ga|1|tranql-connector
+       You would need to configure your JDBC provider here.
+       See https://svn.codehaus.org/tranql/vendors/mysql/tags/tranql-connector-mysql-1.2/tranql-connector-mysql-xa/src/main/rar/META-INF/ra.xml 
+       for more info.
+   -->
+  <bean id="jdbcManagedConnectionFactory" class="org.tranql.connector.mysql.XAMCF">
+    <property name="userName" value="root"/>    
+    <property name="password" value="" />
+    <property name="databaseName" value="test" />
+    <property name="serverName" value="localhost" />
+    <property name="portNumber" value="3306" />
+  </bean>
+
+  <!-- Creates the JDBC ConnectionFactory -->
+  <bean id="mysql-cf" factory-ref="jdbcManagedConnectionFactory" factory-method="createConnectionFactory">
+    <argument ref="connectionManager" />
+  </bean>
+
+  <service ref="mysql-cf" interface="javax.sql.DataSource">
+    <service-properties>      
+      <entry key="osgi.jndi.service.name" value="jdbc/mysqldb"/>      
+      <entry key="datasource.name" value="MySQL"/>    
+    </service-properties>
+  </service>
+
+  <!-- recoverable ResourceManager for JDBC DataSource, uses a wrapper class -->
+  <bean id="transactionRecovery" class="org.apache.camel.demo.camel_jms_jdbc_xa.GenericResourceManager" init-method="doRecovery">
+    <property name="connectionManagerContainer" ref="connectionManager"/>
+    <property name="managedConnectionFactory" ref="jdbcManagedConnectionFactory"/>
+  </bean>
+
+  <!-- ********************************************************************* -->
+  <!-- Part 2: 
+       If bug ENTESB-633 did not exist we could auto-enlist the JDBC driver into 
+       Aries.
+  -->
+  <!--
+    This defines the actual data source bean. It will instantiate a new 
+    ClientXADataSource instance and will use the corresponding settings to set 
+    the database and server name.  In our case, we will be running Apache Derby 
+    on the same machine so the server name is `localhost`. A database called 
+    `transactions` has been created up-front as well (see README.md).
+  -->
+  <!-- due to ENTESB-633 we won't create this bean
+  <bean id="mysql-ds" class="com.mysql.jdbc.jdbc2.optional.MysqlXADataSource">
+    <property name="databaseName" value="test"/>
+    <property name="url" value="jdbc:mysql://localhost/test?relaxAutoCommit=true" />
+    <property name="user" value="root"/>
+    <property name="password" value=""/>
+    <property name="maxActive" value="200"/>
+    <property name="poolPreparedStatements" value="true"/>
+  </bean> 
+  -->
+
+  <!--  due to ENTESB-633 we won't create this bean
+  <bean id="tomcat-jdbc" class="org.apache.tomcat.jdbc.pool.XADataSource">
+    <property name="dataSource" ref="mysql-ds"/>
+    <property name="initialSize" value="1"/>
+    <property name="maxActive" value="5"/>
+    <property name="jmxEnabled" value="true"/>
+  </bean>
+  -->
+
+  <!-- due to ENTESB-633 we won't export this service 
+  <service interface="javax.sql.XADataSource" ref="tomcat-jdbc">
+    <service-properties>
+      <entry key="osgi.jndi.service.name" value="jdbc/mysqldb-buggy"/>
+      <entry key="datasource.name" value="MySQL-buggy"/>
+    </service-properties>
+  </service>
+  -->
+</blueprint>
