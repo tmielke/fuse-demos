@@ -71,9 +71,9 @@ accordingly.
 ### Setting up MySQL
 - start a local MySQL instance (or any other JDBC database)
 - Using the MySQL shell or workbench invoke 
-  - CREATE DATABASE test ;
-  - CREATE TABLE Users (firstname VARCHAR(50) NOT NULL, lastname VARCHAR(50), login VARCHAR(12), password VARCHAR(20), PRIMARY KEY (login)) ;
-  - INSERT INTO Users values ('Joe', 'Doe', 'jdoe', 'secret') ;
+  - `CREATE DATABASE test ;`
+  - `CREATE TABLE Users (firstname VARCHAR(50) NOT NULL, lastname VARCHAR(50), login VARCHAR(12), password VARCHAR(20), PRIMARY KEY (login)) ;`
+  - `INSERT INTO Users values ('Joe', 'Doe', 'jdoe', 'secret') ;`
 
 
 ## COMPILING
