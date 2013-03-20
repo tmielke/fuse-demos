@@ -17,7 +17,6 @@ and finally send the message to another JMS destination.
 
 The two Camel routes simply read:
 
-`
   <camelContext xmlns="http://camel.apache.org/schema/blueprint">
     <!-- Sample route using the camel-sql component -->
     <route id="jms-sql-jms-xa">
@@ -46,7 +45,6 @@ The two Camel routes simply read:
       <to uri="amqxa:queue:JDBC_OUT" />
     </route>
   </camelContext>
-`
 
 Both the camel-jdbc and the camel-sql components are configured to use the same
 MySQL database table.
