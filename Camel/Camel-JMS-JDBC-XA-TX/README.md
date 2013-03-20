@@ -16,6 +16,7 @@ and finally send the message to another JMS destination.
 
 
 The two Camel routes simply read:
+
 `
   <camelContext xmlns="http://camel.apache.org/schema/blueprint">
     <!-- Sample route using the camel-sql component -->
