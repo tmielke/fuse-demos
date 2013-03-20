@@ -124,6 +124,7 @@ Check the JDBC database and verify that this record got written into the Users t
 For more verbose logging about the use of XA transactions, this logging 
 configuration can be applied on the Karaf shell:
 
+```
 log:set DEBUG org.apache.activemq.transaction
 log:set DEBUG org.springframework.transaction
 log:set DEBUG org.springframework.jms.connection.JmsTransactionManager
@@ -131,5 +132,6 @@ log:set DEBUG org.springframework.orm.jpa.JpaTransactionManager
 log:set TRACE org.apache.geronimo.transaction.manager.WrapperNamedXAResource
 log:set DEBUG org.apache.geronimo.transaction.log
 log:set DEBUG org.jencks
+```
 
 This will log every tx.begin, tx.prepare and tx.commit operation to data/log/fuse.log.
