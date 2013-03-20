@@ -87,8 +87,8 @@ from the top level demo directory.
   the line 
   #admin=admin,admin
 - Start JBoss Fuse 6.0 or higher
-- features:addurl mvn:org.apache.camel.demo.camel-jms-jdbc-xa/features/1.0.0/xml/features
-- features:install camel-jms-jdbc-xa-demo
+- `features:addurl mvn:org.apache.camel.demo.camel-jms-jdbc-xa/features/1.0.0/xml/features`
+- `features:install camel-jms-jdbc-xa-demo`
 
 ## RUNNING
 Check that all bundles got deployed and started successfully. 
