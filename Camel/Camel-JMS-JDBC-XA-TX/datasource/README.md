@@ -15,7 +15,7 @@ Instead a workaround solution is presented in src/main/resources/OSGI-INF/bluepr
 ## Checking the OSGi Service Registry
 After the bundle is started, we can use the Fuse ESB Enterprise console to look at the registered objects in the registry.
 
-First, find the bundle id for the bundle called "Fuse By Example :: Transactions :: Datasource" by using the `osgi:list` command.
+First, find the bundle id for the bundle called " ESB :: Demo :: Camel-JMS-JDBC-XA-TX :: DataSource" by using the `osgi:list` command.
 You can use `grep` to filter the list of bundles and quickly find the right one.
 
     FuseESB:karaf@root> osgi:list | grep Transactions
@@ -32,7 +32,7 @@ This is what the `osgi:ls` output looks like
 
     FuseESB:karaf@root> osgi:ls 268
 
-    Camel :: Demo :: Camel-JMS-JDBC-XA-TX :: DataSource (241) provides:
+    Camel :: Demo :: Camel-JMS-JDBC-XA-TX :: DataSource (268) provides:
     -------------------------------------------------------------
     datasource.name = MySQL
     objectClass = javax.sql.XADataSource
