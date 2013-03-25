@@ -32,7 +32,7 @@ This is what the `osgi:ls` output looks like
 
     FuseESB:karaf@root> osgi:ls 268
 
-    Fuse By Example :: Transactions :: Datasource (268) provides:
+    Camel :: Demo :: Camel-JMS-JDBC-XA-TX :: DataSource (241) provides:
     -------------------------------------------------------------
     datasource.name = MySQL
     objectClass = javax.sql.XADataSource
