@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<features name="org.apache.servicemix.demo" 
+    xmlns="http://karaf.apache.org/xmlns/features/v1.0.0">
+    <feature version="${project.version}" name="camel-jms-jdbc-demo">
+
+        <!-- JDBC driver classes -->
+        <bundle>wrap:mvn:mysql/mysql-connector-java/5.1.17</bundle>
+        <bundle>wrap:mvn:commons-dbcp/commons-dbcp/1.4</bundle>
+
+        <!--  Additional Camel features -->
+        <feature>camel-sql</feature>
+        <bundle>mvn:org.apache.camel/camel-jms/${camel.version}</bundle>
+        <bundle>mvn:org.apache.camel/camel-jdbc/${camel.version}</bundle>
+
+        <!-- Finally the demo bundles -->
+        <bundle>wrap:mvn:${project.groupId}/routing/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/datasource/${project.version}</bundle>
+    </feature>
+</features>

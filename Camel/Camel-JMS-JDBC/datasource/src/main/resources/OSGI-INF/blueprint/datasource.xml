@@ -1,0 +1,57 @@
+<!--
+~ Copyright 2011 FuseSource
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~ http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0">
+
+  <!--
+    This defines the actual data source bean. It will instantiate a new 
+    ClientXADataSource instance and will use the corresponding settings to set 
+    the database and server name.  In our case, we will be running Apache Derby 
+    on the same machine so the server name is `localhost`. A database called 
+    `transactions` has been created up-front as well (see README.md).
+  -->
+  <!--
+  <bean id="mysql-ds" class="com.mysql.jdbc.jdbc2.optional.MysqlDataSource">
+    <property name="databaseName" value="test"/>
+    <property name="url" value="jdbc:mysql://localhost/test?relaxAutoCommit=true" />
+    <property name="user" value="root"/>
+    <property name="password" value=""/>
+  </bean> 
+  -->
+  <!--  
+  <bean id="tomcat-jdbc" class="org.apache.tomcat.jdbc.pool.XADataSource">
+    <property name="dataSource" ref="mysql-ds"/>
+    <property name="initialSize" value="1"/>
+    <property name="maxActive" value="5"/>
+    <property name="jmxEnabled" value="true"/>
+  </bean>
+  -->
+
+  <bean id="dbcp" destroy-method="close" class="org.apache.commons.dbcp.BasicDataSource">
+    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+    <property name="url" value="jdbc:mysql://localhost/test?relaxAutoCommit=true"/>
+    <property name="username" value="root"/>
+    <property name="password" value=""/>
+  </bean>  
+
+
+  <service interface="javax.sql.DataSource" ref="dbcp">
+    <service-properties>
+      <entry key="osgi.jndi.service.name" value="jdbc/mysqld"/>
+      <entry key="datasource.name" value="MySQL"/>
+    </service-properties>
+  </service>
+</blueprint>
