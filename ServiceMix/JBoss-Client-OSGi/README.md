@@ -11,11 +11,13 @@ Provides the implementation of a simple stateless session bean.
 The beans interface is defined in src/main/java/org/apache/servicemix/demo/simpleejb/SimpleGreeter.java,
 and offers the following interface
 
+````java
 public interface SimpleGreeter {
 
     String greetMe(String name);
 
 }
+```
 
 The bean implementation class is in src/main/java/org/apache/servicemix/demo/simpleejb/SimpleGreeterBean.java.
 
@@ -67,6 +69,8 @@ Simply run mvn install to compile the demo.
   - this should make the demo start.
 
 - Run log:display, the logging output should read:
+```
 18:25:32,162 | INFO  | l Console Thread | Client | 228 - org.apache.servicemix.demo.simpleejb.simple-ejb-client - 1.0.0 | main started.
 18:25:32,176 | INFO  | l Console Thread | Client | 228 - org.apache.servicemix.demo.simpleejb.simple-ejb-client - 1.0.0 | Obtained a remote EJB reference for invocation.
 18:25:32,183 | INFO  | l Console Thread | Client | 228 - org.apache.servicemix.demo.simpleejb.simple-ejb-client - 1.0.0 | Result is: "Welcome user, you have just invoked SimpleGreeterBean!"
+```
