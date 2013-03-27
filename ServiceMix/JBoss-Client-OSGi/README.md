@@ -60,7 +60,7 @@ Simply run mvn install to compile the demo.
 
 
 ## Running
-- start <demo bundle id>
+- `start <demo bundle id>`
 - If this raises any ClassNotFoundExceptions or NoClassDefFoundErrors 
   (which it should not) then 
   - `stop <demo bundle id>`
