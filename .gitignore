@@ -4,3 +4,12 @@
 *.jar
 *.war
 *.ear
+
+# Eclipse project files #
+.project
+.settings
+.classpath
+
+# MacOSX specific files #
+.DS_Store
+
