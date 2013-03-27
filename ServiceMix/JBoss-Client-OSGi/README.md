@@ -60,12 +60,12 @@ Simply run mvn install to compile the demo.
 
 
 ## Running
-- `start <demo bundle id>`
+- `osgi:start <demo bundle id>`
 - If this raises any ClassNotFoundExceptions or NoClassDefFoundErrors 
   (which it should not) then 
-  - `stop <demo bundle id>`
+  - `osgi:stop <demo bundle id>`
   - `dev:dynamic-import <bundle id>`
-  - `start <demo bundle id>`
+  - `osgi:start <demo bundle id>`
   - this should make the demo start.
 
 - Run log:display, the logging output should read:
