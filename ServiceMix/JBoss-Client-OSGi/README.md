@@ -42,7 +42,7 @@ Simply run mvn install to compile the demo.
 ### Deploying
 1) Deploying the EJB into JBoss
 - Start JBoss 5 or later (assuming default configuration)
-- cp Simple-EJB/target/simple-ejb-demo-1.0.0-client.jar $JBOSS_HOME/server/default/deploy
+- `cp Simple-EJB/target/simple-ejb-demo-1.0.0-client.jar $JBOSS_HOME/server/default/deploy`
   Verify the EJB gets deployed correctly.
 
 2) Deploying the client into OSGi
@@ -53,19 +53,19 @@ Simply run mvn install to compile the demo.
   set the JBOSS-HOME variable correctly beforehand. The script creates a larger
   jboss-client-all.jar that is then to be deployed into Fuse ESB.
 - Start Fuse ESB Enterprise
-- osgi:install wrap:file:/path/to/demo/EJB-Client/jboss-client-all.jar
-- start <bundle id>
-- osgi:install mvn:org.apache.servicemix.demo.simpleejb/simple-ejb-client/1.0.0
-  or cp Simple-EJB/target/simple-ejb-demo-1.0.0-client.jar $SMX_HOME/deploy
+- `osgi:install wrap:file:/path/to/demo/EJB-Client/jboss-client-all.jar`
+- `start <bundle id>`
+- `osgi:install mvn:org.apache.servicemix.demo.simpleejb/simple-ejb-client/1.0.0`
+  or `cp Simple-EJB/target/simple-ejb-demo-1.0.0-client.jar $SMX_HOME/deploy`
 
 
 ## Running
 - start <demo bundle id>
 - If this raises any ClassNotFoundExceptions or NoClassDefFoundErrors 
   (which it should not) then 
-  - stop <demo bundle id>
-  - dev:dynamic-import <bundle id>
-  - start <demo bundle id>
+  - `stop <demo bundle id>`
+  - `dev:dynamic-import <bundle id>`
+  - `start <demo bundle id>`
   - this should make the demo start.
 
 - Run log:display, the logging output should read:
