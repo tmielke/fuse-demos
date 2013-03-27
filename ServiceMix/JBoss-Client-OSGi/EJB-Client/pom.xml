@@ -1,0 +1,111 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+      <groupId>com.apache.servicemix.demo.simpleejb</groupId>
+      <artifactId>simple-ejb-parent</artifactId>
+      <version>1.0.0</version>
+    </parent>
+
+    <groupId>org.apache.servicemix.demo.simpleejb</groupId>
+    <artifactId>simple-ejb-client</artifactId>
+    <version>1.0.0</version>
+    <name>ServiceMix :: Demo :: OSGi to EJB :: Client</name>
+    <packaging>bundle</packaging>
+
+    <properties>
+        <servicemix.osgi.import>
+          *, javax.ejb;version="[0.0.0,4)",
+          org.jboss.security.plugins,
+          org.jboss.remoting.transport.socket,
+          org.jnp.interfaces,
+          org.jboss.remoting,
+          org.jboss.ejb3.proxy.impl.objectfactory.session.stateless
+        </servicemix.osgi.import>
+        <servicemix.osgi.export>
+            org.apache.servicemix.demo.simpleejb
+        </servicemix.osgi.export>
+        <servicemix.osgi.private>
+          org.apache.servicemix.demo.simpleejb.client.osgi,
+          org.apache.servicemix.demo.simpleejb.client
+        </servicemix.osgi.private>
+        <servicemix.osgi.bundles />
+        <servicemix.osgi.dynamic.import />
+   </properties>
+
+   <dependencies>
+    <dependency>
+      <groupId>org.apache.servicemix.demo.simpleejb</groupId>
+      <artifactId>simple-ejb-demo</artifactId>
+      <version>1.0.0</version>
+      <type>ejb-client</type>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.geronimo.specs</groupId>
+      <artifactId>geronimo-ejb_3.1_spec</artifactId>
+      <version>1.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.6.6</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
+      <version>4.2.0</version>
+      <scope>provided</scope>
+    </dependency>
+   </dependencies>
+
+
+    <build>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <extensions>true</extensions>
+          <configuration>
+        <instructions>
+          <Export-Package>${servicemix.osgi.export}</Export-Package>
+          <Import-Package>${servicemix.osgi.import}</Import-Package>
+          <Require-Bundle>${servicemix.osgi.bundles}</Require-Bundle>
+          <DynamicImport-Package>${servicemix.osgi.dynamic.import}</DynamicImport-Package>
+          <Private-Package>${servicemix.osgi.private}</Private-Package>
+          <Bundle-Activator>org.apache.servicemix.demo.simpleejb.client.osgi.OSGiActivator</Bundle-Activator>
+        </instructions>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+          <optimize>true</optimize>
+          <debug>true</debug>
+          <showDeprecation>true</showDeprecation>
+          <showWarnings>true</showWarnings>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.1.1</version>
+            <configuration>
+              <mainClass>org.apache.servicemix.demo.simpleejb.client.Client</mainClass>
+              <arguments>
+                <argument></argument>
+              </arguments>
+              <commandlineArgs></commandlineArgs>
+            </configuration>
+          </plugin>
+      </plugins>
+    </build>
+</project>
