@@ -77,7 +77,7 @@
         <property name="transacted" value="false" />
         <property name="transactionManager" ref="platformTxManager" />
         <property name="maxConcurrentConsumers" value="1" />
-        <property name="cacheLevelName" value="CACHE_NONE" />
+        <property name="cacheLevelName" value="CACHE_CONNECTION" />
     </bean>
 
     <bean id="XAPooledCF" class="org.apache.activemq.pool.JcaPooledConnectionFactory" init-method="start" destroy-method="stop">
