@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) Red Hat, Inc.
+
+Red Hat licenses this file to you under the Apache License, version
+2.0 (the "License"); you may not use this file except in compliance
+with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+implied. See the License for the specific language governing
+permissions and limitations under the License.
+-->
+
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 
+        http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <reference id="platformTxManager" interface="org.springframework.transaction.PlatformTransactionManager" availability="mandatory"/>
+    <reference id="transactionManager" interface="javax.transaction.TransactionManager" />
+    <reference id="recoverableTxManager" interface="org.apache.geronimo.transaction.manager.RecoverableTransactionManager" availability="mandatory" />
+
+    <bean id="requiredJta" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
+        <property name="transactionManager" ref="platformTxManager" />
+       <property name="propagationBehaviorName" value="PROPAGATION_REQUIRED" />
+    </bean>
+
+    <!-- custom Camel Processor bean -->
+    <bean class="org.apache.camel.demo.camel_wmq_amq_xa_tx.TestProcessor" id="testProcessor" >
+      <property name="simulateProcessingError" value="false" />
+      <property name="errorAfterMsgs" value="3" />
+    </bean>
+
+
+    <!-- ******************** Camel route definition  ********************* --> 
+    <camelContext xmlns="http://camel.apache.org/schema/blueprint">
+        <route id="wmq-to-amq">
+          <from uri="wmqxa:IN" />
+          <transacted ref="requiredJta" /> 
+          <log message="GOT MESSAGE ################################" />
+          <log message="REDELIVERED: ${header.JMSRedelivered}" />
+          <to uri="amqxa:queue:OUT" />
+          <process ref="testProcessor" />
+          <log message="AFTER CAMEL PROCESSOR ######################" />        
+        </route>
+
+        <!-- This route could be used to push some messages to WMQ -->
+        <!--
+        <route id="PushMessages">
+          <from uri="timer:Push?repeatCount=10"/>
+          <setBody>
+            <constant>Hello World.</constant>
+          </setBody>
+          <log message="${body}"/>
+          <to uri="wmqxa:queue:TEST_IN"/>
+        </route>
+        -->
+    </camelContext>	
+
+
+    <!-- ********************* AMQ configuration ************************** -->
+    <bean id="amqxa" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="configuration" ref="AMQConfig" />
+    </bean>
+
+    <bean id="AMQConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+        <property name="connectionFactory" ref="XAPooledCF" />
+        <property name="transacted" value="false" />
+        <property name="transactionManager" ref="platformTxManager" />
+        <property name="maxConcurrentConsumers" value="5" />
+        <property name="cacheLevelName" value="CACHE_CONNECTION" />
+    </bean>
+
+    <bean id="XAPooledCF" class="org.apache.activemq.pool.JcaPooledConnectionFactory" init-method="start" destroy-method="stop">
+        <property name="name" value="activemq.default" />
+        <property name="maxConnections" value="5" />
+        <property name="connectionFactory" ref="AmqXaCF" />
+        <property name="transactionManager" ref="transactionManager" />
+    </bean>
+
+    <bean id="AmqXaCF" class="org.apache.activemq.ActiveMQXAConnectionFactory">
+        <property name="brokerURL" value="failover:(tcp://localhost:61616)?jms.prefetchPolicy.all=1" />
+        <property name="userName" value="admin" />
+        <property name="password" value="admin" />
+    </bean>
+
+    <!-- A ResourceManager is used to recover any pending tx after a crash.
+         You need a ResourceManager definition per XA resource.
+         Note the ResourceManger gets the same unique name set as the 
+         JMS ConnectionFactory
+    -->
+    <bean id="resourceManager-AMQ" class="org.apache.activemq.pool.ActiveMQResourceManager" init-method="recoverResource">
+        <property name="transactionManager" ref="recoverableTxManager" />
+        <property name="connectionFactory" ref="AmqXaCF" />
+        <property name="resourceName" value="activemq.default" />
+    </bean>
+
+
+    <!-- ********************* WebSphereMQ configuration ****************** -->
+    <bean id="wmqxa" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="configuration" ref="WMQConfig" />
+    </bean>
+
+    <bean id="WMQConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+        <property name="connectionFactory" ref="FuseWmqXaConnectionFactory" />
+        <property name="transacted" value="false" />
+        <property name="transactionManager" ref="platformTxManager" />
+        <property name="maxConcurrentConsumers" value="5" />
+        <property name="cacheLevelName" value="CACHE_CONNECTION" />
+    </bean>
+
+    <bean id="FuseWmqXaConnectionFactory" class="org.fusesource.jms.pool.JcaPooledConnectionFactory">
+        <!-- make sure to set property xaConnectionFactory and not connectionFactory -->
+        <property name="xaConnectionFactory" ref="WMQConnectionFactory"/>
+        <property name="transactionManager" ref="transactionManager"/>
+        <property name="maxConnections" value="5"/>
+        <!-- note we set a unique name for the XA resource" -->
+        <property name="name" value="ibm-wmq" />
+    </bean>
+
+    <bean id="WMQConnectionFactory" class="com.ibm.mq.jms.MQXAConnectionFactory">
+        <property name="hostName" value="192.168.178.52" />
+        <property name="port" value="1414" />
+        <property name="queueManager" value="QM_VM" />
+        <property name="channel" value="TEST" />
+        <property name="transportType" value="1" />
+    </bean>
+
+    <!-- A ResourceManager is used to recover any pending tx after a crash.
+         You need a ResourceManager definition per XA resource.
+         Note the ResourceManger gets the same unique name set as the 
+         JMS ConnectionFactory
+    -->
+    <bean id="resourceManager-WMQ" class="org.fusesource.jms.pool.GenericResourceManager" init-method="recoverResource">
+        <property name="connectionFactory" ref="WMQConnectionFactory" />
+        <property name="transactionManager" ref="recoverableTxManager" />
+        <!-- name needs to match name property set on JcaPooledConnectionFactory above -->
+        <property name="resourceName" value="ibm-wmq" />
+    </bean>
+</blueprint>
