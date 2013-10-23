@@ -1,6 +1,5 @@
 ## Camel-WMQ-AMQ-XA-TX Demo
 
-
 Verified and tested against JBoss Fuse 6.0.
 
 
@@ -57,7 +56,7 @@ This demo contains two subdirectories:
   features/src/main/resources/features.xml
 
 
-###Important things to notice about XA transactions:
+### Important things to notice about XA transactions:
 1) Some extra configuration is needed to run this demo successfully on versions 
    up to SMX 4.4.1-fuse-03-06. This is due to ESB-1683, ESB-1711 and ESB-1722. 
    See steps below for details. Its recommended to run this demo on 
@@ -117,7 +116,7 @@ This demo contains two subdirectories:
 mvn clean install
 
 
-### PRE-REQUISITE CONFIGURATION FOR ServiceMix 4.4.1-fuse-03-06 and older
+### Pre-requisite configuration for ServiceMix 4.4.1-fuse-03-06 and older
 
 Skip this entire section if you are using JBoss Fuse 6.0 or later.
 
@@ -154,7 +153,7 @@ up to 4.4.1-fuse-03-06.
 
 
 
-## DEPLOYING:
+## Deploying
 
 - Edit `src/main/resources/OSGI-INF/blueprint/camel-context.xml` of this demo
   and configure the bean with id=WMQConnectionFactory to match your WebSphereMQ 
@@ -179,7 +178,7 @@ up to 4.4.1-fuse-03-06.
   before continuing. See pre-requisites above.
 
 
-## RUNNING
+## Running
 
 - Start JBoss Fuse 6.0
 
