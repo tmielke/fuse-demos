@@ -22,7 +22,7 @@ Out of the box the custom Camel processor won't raise an exception.
 
 
 The Camel route simply reads:
-
+```xml
     <camelContext xmlns="http://camel.apache.org/schema/blueprint">
       <route id="wmq-to-amq">
         <from uri="wmqxa:IN" />
@@ -34,7 +34,7 @@ The Camel route simply reads:
         <log message="AFTER CAMEL PROCESSOR ######################" />        
       </route>
     </camelContext>
-
+```
 
 This demo is not a JUnit test and can also not be run using the maven-camel-plugin 
 (mvn camel:run)! In order to use XA it needs to be deployed into JBoss Fuse!
