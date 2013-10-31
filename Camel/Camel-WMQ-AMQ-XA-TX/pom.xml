@@ -19,6 +19,32 @@
     <module>routing</module>
   </modules>
 
+  <pluginRepositories>
+    <pluginRepository>
+      <id>fusesource.release</id>
+      <name>FuseSource Release Repo</name>
+      <url>http://repo.fusesource.com/nexus/content/groups/public/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+  <repositories>
+    <repository>
+      <id>fusesource.release</id>
+      <name>FuseSource Release Repo</name>
+      <url>http://repo.fusesource.com/nexus/content/groups/public/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
   <build>
     <pluginManagement>
       <plugins>
