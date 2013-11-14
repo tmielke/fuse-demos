@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:amq="http://activemq.apache.org/schema/core"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+    http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+
+
+  <camelContext xmlns="http://camel.apache.org/schema/spring">
+    <!-- A Java DSL example is also available at -->
+    <package>org.apache.camel.test</package>
+
+    <route id="camel-http-proxy">
+      <from uri="jetty://http://localhost:9000/weather?matchOnUriPrefix=true"/>
+      <to uri="http://weather.yahoo.com/united-states?bridgeEndpoint=true&amp;throwExceptionOnFailure=false" />
+      <to uri="log:MyLogger?level=INFO&amp;showAll=true" />
+    </route>
+  </camelContext>
+</beans>
