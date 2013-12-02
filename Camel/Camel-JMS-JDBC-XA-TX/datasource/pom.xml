@@ -23,14 +23,14 @@
   <parent>
     <groupId>org.apache.camel.demo</groupId>
     <artifactId>camel-jms-jdbc-xa</artifactId>
-    <version>1.0.0</version>
+    <version>2.0.0</version>
   </parent>
 
   <groupId>org.apache.camel.demo.camel-jms-jdbc-xa</groupId>
   <artifactId>datasource</artifactId>
   <packaging>bundle</packaging>
   <name>Camel :: Demo :: Camel-JMS-JDBC-XA-TX :: DataSource</name>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
 
   <dependencies>
     <dependency>
@@ -38,7 +38,26 @@
       <artifactId>geronimo-connector</artifactId>
       <version>2.2.2</version>
     </dependency>
+
+    <!--  needed for overriding tranql-connector-mysql XAMCF class -->
+    <dependency>
+      <groupId>org.tranql</groupId>
+      <artifactId>tranql-connector</artifactId>
+      <version>1.8</version>
+    </dependency>
+    <dependency>
+      <groupId>org.tranql</groupId>
+      <artifactId>tranql-connector-mysql-common</artifactId>
+      <version>1.6</version>
+    </dependency>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.17</version>
+    </dependency>
+    <!-- end -->
   </dependencies>
+
 
   <build>
     <plugins>

@@ -30,8 +30,8 @@
   <bean id="connectionManager" class="org.apache.geronimo.connector.outbound.GenericConnectionManager">
     <argument index="0">
       <bean class="org.apache.geronimo.connector.outbound.connectionmanagerconfig.XATransactions">
-    <argument value="true" />
-    <argument value="false" />
+        <argument value="true" />
+        <argument value="false" />
       </bean>
     </argument>
     <argument index="1">
@@ -61,15 +61,22 @@
   <service ref="classLoader" auto-export="all-classes" />
 
    <!-- 
-       Tranql provides the ManagedConnectionFactory but delegates all the work to the JDBC drivers.
-       There are factories for every major JDBC provider at 
-       http://search.maven.org/#search|ga|1|tranql-connector
+       Tranql provides the ManagedConnectionFactory but delegates all the work
+       to the JDBC drivers. There are factories for every major JDBC provider
+       at http://search.maven.org/#search|ga|1|tranql-connector
        You would need to configure your JDBC provider here.
        See https://svn.codehaus.org/tranql/vendors/mysql/tags/tranql-connector-mysql-1.2/tranql-connector-mysql-xa/src/main/rar/META-INF/ra.xml 
        for more info.
-   -->
-  <bean id="jdbcManagedConnectionFactory" class="org.tranql.connector.mysql.XAMCF">
-    <property name="userName" value="root"/>    
+
+        The default tranql XAMCF implementation considers all SQLExceptions as
+        non-fatal. If the underlying db gets restarted this means it won't
+        refresh the JDBC connection and Camel won't be able to push any more
+        messages into the database. By providing our own implementation of
+        XAMCF this can be handled correctly.
+  -->
+  <!-- bean id="jdbcManagedConnectionFactory" class="org.tranql.connector.mysql.XAMCF"-->
+  <bean id="jdbcManagedConnectionFactory" class="org.apache.camel.demo.camel_jms_jdbc_xa.MySQLXAMCF">
+    <property name="userName" value="root"/>
     <property name="password" value="" />
     <property name="databaseName" value="test" />
     <property name="serverName" value="localhost" />

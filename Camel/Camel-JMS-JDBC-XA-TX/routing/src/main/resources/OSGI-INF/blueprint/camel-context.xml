@@ -19,7 +19,7 @@
         <!-- Sample route using the camel-sql component -->
         <route id="jms-sql-jms-xa">
            <from uri="amqxa:SQL_IN" />
-            <transacted ref="requiredJta" /> 
+            <!-- transacted ref="requiredJta" / --> 
             <log message="REDELIVERED: ${header.JMSRedelivered}" />
             <!--  Camel 2.10 does not support named parameters yet-->
             <convertBodyTo type="java.lang.Object[]" />
@@ -34,7 +34,7 @@
         <!--  Sample route using camel-jdbc component -->
         <route id="jms-jdbc-jms-xa">
            <from uri="amqxa:JDBC_IN" />
-            <transacted ref="requiredJta" /> 
+            <!-- transacted ref="requiredJta" /-->
             <log message="REDELIVERED: ${header.JMSRedelivered}" />
             <!-- when using XA transactions, need to set resetAutoCommit=false
                 otherwise this error may be thrown:
@@ -91,6 +91,11 @@
         <property name="brokerURL" value="failover:(tcp://localhost:61616)?jms.prefetchPolicy.all=1" />
         <property name="userName" value="admin" />
         <property name="password" value="admin" />
+	<property name="redeliveryPolicy" ref="policy" />
+    </bean>
+
+    <bean id="policy" class="org.apache.activemq.RedeliveryPolicy">
+      <property name="maximumRedeliveries" value="6" />
     </bean>
 
     <bean id="resourceManager-AMQ" class="org.apache.activemq.pool.ActiveMQResourceManager" init-method="recoverResource">

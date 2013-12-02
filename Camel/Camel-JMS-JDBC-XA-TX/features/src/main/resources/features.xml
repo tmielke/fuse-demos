@@ -14,8 +14,8 @@
         -->
         <!-- due to ENTESB-633 workaround we also need these bundles -->
         <bundle>wrap:mvn:mysql/mysql-connector-java/5.1.17</bundle>
-        <bundle>wrap:mvn:org.tranql/tranql-connector/1.7</bundle>
-        <bundle>wrap:mvn:org.tranql/tranql-connector-mysql-common/1.5</bundle>
+        <bundle>wrap:mvn:org.tranql/tranql-connector/1.8</bundle>
+        <bundle>wrap:mvn:org.tranql/tranql-connector-mysql-common/1.6</bundle>
 
         <!--  additional Camel features -->
         <feature>camel-sql</feature>
@@ -26,4 +26,9 @@
         <bundle>mvn:${project.groupId}/routing/${project.version}</bundle>
         <bundle>mvn:${project.groupId}/datasource/${project.version}</bundle>
     </feature>
+    
+    <!-- 
+      features:addurl mvn:org.apache.camel.demo.camel-jms-jdbc-xa/features/2.0.0/xml/features
+      features:install camel-jms-jdbc-xa-demo
+     -->
 </features>

@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.camel.demo</groupId>
     <artifactId>camel-jms-jdbc-xa</artifactId>
-    <version>1.0.0</version>
-    <name>Camel :: Demo :: Camel-JMS-JDBC-XA-TX</name>
+    <version>2.0.0</version>
+    <name>Camel :: Demo :: Camel-JMS-JDBC-XA-TX </name>
     <packaging>pom</packaging>
 
     <properties>
