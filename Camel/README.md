@@ -9,7 +9,13 @@ shows how to route messages in Camel from a JMS broker into a JDBC database.
 
 
 ### Camel-JMS-JDBC-XA-TX 
-similar to above demo but using XA transactions
+similar to above demo but using XA transactions. To be used on 
+JBoss Fuse 6.1 or higher
+
+
+### Camel-JMS-JDBC-XA-TX-JBossFuse6.0
+as above but specifically for JBoss Fuse 6.0 to workaround bug ENTESB-633
+https://issues.jboss.org/browse/ENTESB-633
 
 
 ### Camel-WMQ-AMQ-XA-TX

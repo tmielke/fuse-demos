@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) Red Hat, Inc.
+
+  Red Hat licenses this file to you under the Apache License, version
+  2.0 (the "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  implied.  See the License for the specific language governing
+  permissions and limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.apache.camel.demo</groupId>
+    <artifactId>camel-jms-jdbc-xa</artifactId>
+    <version>2.0.0</version>
+  </parent>
+
+  <groupId>org.apache.camel.demo.camel-jms-jdbc-xa</groupId>
+  <artifactId>datasource</artifactId>
+  <packaging>bundle</packaging>
+  <name>Camel :: Demo :: Camel-JMS-JDBC-XA-TX :: DataSource</name>
+  <version>2.0.0</version>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.geronimo.components</groupId>
+      <artifactId>geronimo-connector</artifactId>
+      <version>3.0</version>
+    </dependency>
+
+    <!--  needed for overriding tranql-connector-mysql XAMCF class -->
+    <dependency>
+      <groupId>org.tranql</groupId>
+      <artifactId>tranql-connector</artifactId>
+      <version>1.8</version>
+    </dependency>
+    <dependency>
+      <groupId>org.tranql</groupId>
+      <artifactId>tranql-connector-mysql-common</artifactId>
+      <version>1.6</version>
+    </dependency>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.17</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.6.6</version>
+    </dependency>
+    <!-- end -->
+  </dependencies>
+
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>

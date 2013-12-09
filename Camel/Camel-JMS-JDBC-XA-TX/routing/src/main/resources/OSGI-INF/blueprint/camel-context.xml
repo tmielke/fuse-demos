@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
+    xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 
+        http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+
+    <!-- Imported OSGi services include the Transaction manager and JDBC DataSource -->
+    <reference id="platformTxManager" interface="org.springframework.transaction.PlatformTransactionManager" availability="mandatory"/>
+    <reference id="transactionManager" interface="javax.transaction.TransactionManager" />
+    <reference id="recoverableTxManager" interface="org.apache.geronimo.transaction.manager.RecoverableTransactionManager" availability="mandatory" />
+    <reference id="mysql-db" interface="javax.sql.DataSource" availability="mandatory" filter="(datasource.name=MySQL)" />
+
+
+    <!-- ******************** Camel route definition  ********************* -->
+    <camelContext xmlns="http://camel.apache.org/schema/blueprint">
+        <!-- Sample route using the camel-sql component -->
+        <route id="jms-sql-jms-xa">
+           <from uri="amqxa:SQL_IN" />
+            <!-- transacted ref="requiredJta" / --> 
+            <log message="REDELIVERED: ${header.JMSRedelivered}" />
+            <!--  Camel 2.10 does not support named parameters yet-->
+            <convertBodyTo type="java.lang.Object[]" />
+            <to uri ="sql:INSERT INTO USERS values (#, #, #, #)" />
+            <setBody>
+                <constant>Data correctly written to database.</constant>
+            </setBody>
+            <to uri="log:AfterJDBC?level=INFO&amp;showAll=true" />
+            <to uri="amqxa:queue:SQL_OUT" />
+        </route>
+
+        <!--  Sample route using camel-jdbc component -->
+        <route id="jms-jdbc-jms-xa">
+           <from uri="amqxa:JDBC_IN" />
+            <!-- transacted ref="requiredJta" /-->
+            <log message="REDELIVERED: ${header.JMSRedelivered}" />
+            <!-- when using XA transactions, need to set resetAutoCommit=false
+                otherwise this error may be thrown:
+                "java.sql.SQLException: Can't set autocommit to 'true' on an XAConnection"
+            -->
+            <to uri="jdbc:mysql-db?resetAutoCommit=false" />
+            <setBody>
+                <constant>Data correctly written to database.</constant>
+            </setBody>
+            <to uri="log:AfterJDBC?level=INFO&amp;showAll=true" />
+            <to uri="amqxa:queue:JDBC_OUT" />
+        </route>
+    </camelContext>
+
+
+    <!-- custom Camel Processor bean -->
+    <bean class="org.apache.camel.demo.camel_jms_jdbc_xa.TestProcessor" id="testProcessor" >
+      <property name="simulateProcessingError" value="false" />
+      <property name="errorAfterMsgs" value="3" />
+    </bean>
+
+
+    <bean id="sql" class="org.apache.camel.component.sql.SqlComponent">
+        <property name="dataSource" ref="mysql-db"/>
+    </bean>
+
+    <bean id="requiredJta" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
+        <property name="transactionManager" ref="platformTxManager" />
+        <property name="propagationBehaviorName" value="PROPAGATION_REQUIRED" />
+    </bean>
+
+ 
+    <!-- ********************* AMQ configuration ************************** -->
+    <bean id="amqxa" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="configuration" ref="AMQConfig" />
+    </bean>
+
+    <bean id="AMQConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+        <property name="connectionFactory" ref="XAPooledCF" />
+        <property name="transacted" value="false" />
+        <property name="transactionManager" ref="platformTxManager" />
+        <property name="maxConcurrentConsumers" value="1" />
+        <property name="cacheLevelName" value="CACHE_CONNECTION" />
+    </bean>
+
+    <bean id="XAPooledCF" class="org.apache.activemq.pool.JcaPooledConnectionFactory" init-method="start" destroy-method="stop">
+        <property name="name" value="activemq.default" />
+        <property name="maxConnections" value="1" />
+        <property name="connectionFactory" ref="AmqXaCF" />
+        <property name="transactionManager" ref="transactionManager" />
+    </bean>
+
+    <bean id="AmqXaCF" class="org.apache.activemq.ActiveMQXAConnectionFactory">
+        <property name="brokerURL" value="failover:(tcp://localhost:61616)" />
+        <property name="userName" value="admin" />
+        <property name="password" value="admin" />
+	<!--property name="redeliveryPolicy" ref="policy" /-->
+    </bean>
+
+    <bean id="policy" class="org.apache.activemq.RedeliveryPolicy">
+      <property name="maximumRedeliveries" value="6" />
+    </bean>
+
+    <bean id="resourceManager-AMQ" class="org.apache.activemq.pool.ActiveMQResourceManager" init-method="recoverResource">
+        <property name="transactionManager" ref="recoverableTxManager" />
+        <!-- CF must be of type ActiveMQConnectionFactory, otherwise no recovery will occur -->
+        <property name="connectionFactory" ref="AmqXaCF" />
+	<property name="userName" value="admin" />
+	<property name="password" value="admin" />
+
+        <!-- name needs to match name property set on JcaPooledConnectionFactory above -->
+        <property name="resourceName" value="activemq.default" /> 
+    </bean>
+</blueprint>

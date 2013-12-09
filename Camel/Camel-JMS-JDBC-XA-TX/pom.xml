@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.apache.camel.demo</groupId>
+    <artifactId>camel-jms-jdbc-xa</artifactId>
+    <version>2.0.0</version>
+    <name>Camel :: Demo :: Camel-JMS-JDBC-XA-TX </name>
+    <packaging>pom</packaging>
+
+    <properties>
+        <camel.version>2.12.0.redhat-610139</camel.version>
+        <amq.version>5.9.0.redhat-610139</amq.version>
+        <tomcat-jdbc.version>7.0.37</tomcat-jdbc.version>
+        <juli.version>6.0.36</juli.version>
+        <mysql.version>5.1.17</mysql.version>
+    </properties>
+
+    <modules>
+        <module>features</module>
+        <module>datasource</module>
+        <module>routing</module>
+    </modules>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <version>2.3.7</version>
+          <extensions>true</extensions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.0</version>
+          <extensions>true</extensions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>

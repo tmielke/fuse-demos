@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<features name="org.apache.servicemix.demo" 
+    xmlns="http://karaf.apache.org/xmlns/features/v1.0.0">
+    <feature version="${project.version}" name="camel-jms-jdbc-xa-demo">
+
+        <!-- Prerequisite bundles -->
+	<!-- aries.transaction.jdbc should be installed out of the box in 6.1 but is not in release candidate.
+             https://issues.jboss.org/browse/ENTESB-1029
+        -->
+        <bundle>mvn:org.apache.aries.transaction/org.apache.aries.transaction.jdbc/1.0.1.redhat-610139</bundle>
+        <bundle>mvn:org.apache.geronimo.specs/geronimo-j2ee-connector_1.5_spec/2.0.0</bundle>
+        
+        <!-- JDBC driver classes -->
+	<bundle>wrap:mvn:mysql/mysql-connector-java/5.1.17</bundle>
+
+	<!-- No pooling classes needed, pooling is provided by Aries wrapper
+        <bundle>wrap:mvn:org.apache.tomcat/tomcat-jdbc/7.0.37</bundle>
+        <bundle>wrap:mvn:org.apache.tomcat/juli/6.0.36$Bundle-SymbolicName=juli&amp;Bundle-Version=6.0.36&amp;Export-Package=org.apache.juli;version=6.0.36,org.apache.juli.logging;version=6.0.36</bundle>
+        -->
+
+        <!--  additional Camel features -->
+        <feature>camel-sql</feature>
+        <bundle>mvn:org.apache.camel/camel-jms/${camel.version}</bundle>
+        <bundle>mvn:org.apache.camel/camel-jdbc/${camel.version}</bundle>
+
+        <!-- finally the demo bundles -->
+        <bundle>mvn:${project.groupId}/datasource/${project.version}</bundle>
+        <bundle>mvn:${project.groupId}/routing/${project.version}</bundle>
+    </feature>
+    
+    <!-- 
+      features:addurl mvn:org.apache.camel.demo.camel-jms-jdbc-xa/features/2.0.0/xml/features
+      features:install camel-jms-jdbc-xa-demo
+     -->
+</features>
