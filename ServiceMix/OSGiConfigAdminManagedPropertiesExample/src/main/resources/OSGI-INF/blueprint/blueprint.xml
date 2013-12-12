@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2012 FuseSource
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License 
+    You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+    License for the specific language governing permissions and limitations
+    under the License. -->
+
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:camel="http://camel.apache.org/schema/blueprint"
+    xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+    xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.2.0"
+    xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+       http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/spring/camel-blueprint.xsd">
+
+
+    <!-- Documentation of the OSGi ConfigAdmin service at 
+         http://docs.spring.io/osgi/docs/current/reference/html/compendium.html#compendium:cm 
+
+         The Following update-strategies are allowed: ['none', reload'].
+         'reload' re-creates then entire application upon an update and
+         causes the setter method being called even when using a
+         component-managed update strategy below in my managed properties.
+         When using an update strategy below in managed-properties, this
+         update strategy can be set to 'none'.
+    -->
+    <cm:property-placeholder id="config" persistent-id="org.apache.karaf.demo.config_admin_demo"
+        update-strategy="none">
+        <cm:default-properties>
+            <cm:property name="brokerUrl" value="failover:(tcp://127.0.0.1:61616)" />
+            <cm:property name="jettyPort" value="9090" />
+            <cm:property name="pingFrequency" value="15000" />
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <!-- This is used to inject PingBean2 configuration at instantiation time -->
+    <cm:cm-properties id="myProps" persistent-id="org.apache.karaf.demo.config_admin_demo" />
+
+
+    <!-- This config illustrates different configuration mechanisms using two
+         different beans.
+         PingBean has setter methods for all its configuration. So on 
+         class instantiation, its setter methods are called and configuration 
+         is pushed to the bean.
+
+         PingBean2 has no setter methods for its configuration.
+         So it cannot get its configuration at creation time 
+         using setters. Instead it implements a method 
+           public void setConfig(Map<String,?> properties);
+         and can take a configuration using a Map or Properties object.
+         For this to happen its necessary to set the bean properties using
+           <property name="config" ref="myProps"/>
+         and to also use 
+           <cm:cm-properties id="myProps" persistent-id="org.apache.karaf.demo.config_admin_demo" />
+
+         Both PingBean classes also provide an update() method
+           public void update(Map<String,?> properties)
+         which can be used as an update callback when using managed properties
+         with 'component-managed' update strategy. So both classes can use
+         the 'component-managed update' strategy.
+         Since PingBean2 does not have setter methods, it cannot use the
+         container-managed update strategy.
+     -->
+
+
+    <bean id="pingBean" class="org.apache.karaf.demo.impl.PingBean" >
+
+        <!-- You can use either 'component-managed' or 'container-managed'
+             update strategy. 
+             component-managed - you need to provide a callback method that 
+                                 takes a Map or Properties object as parameter.
+             container-managed - re-inject bean properties by name based on the
+                                 new properties received in the update. 
+                                 You need to supply getter and setter methods 
+                                 for every property
+
+             When using component-managed strategy change above update-strategy of 
+              <cm:property-placeholder> to 'none'.
+       -->
+<!--  
+       <cm:managed-properties persistent-id="org.apache.karaf.demo.config_admin_demo"
+            update-strategy="component-managed" update-method="update" /> 
+-->
+
+       <cm:managed-properties persistent-id="org.apache.karaf.demo.config_admin_demo"
+            update-strategy="container-managed" />
+    </bean>
+
+
+    <bean id="pingBean2" class="org.apache.karaf.demo.impl.PingBean2" >
+
+        <!-- Used to configure bean at creation time -->
+        <property name="config" ref="myProps"/>
+
+        <!-- You can use either 'component-managed' or 'container-managed'
+             update strategy. 
+             component-managed - you need to provide a callback method that 
+                                 takes a Map or Properties object as parameter.
+             container-managed - re-inject bean properties by name based on the
+                                 new properties received in the update. 
+                                 You need to supply getter and setter methods 
+                                 for every property
+
+             When using component-managed strategy change above update-strategy of 
+              <cm:property-placeholder> to 'none' 
+       -->
+
+
+       <cm:managed-properties persistent-id="org.apache.karaf.demo.config_admin_demo"
+           update-strategy="component-managed" update-method="setConfig" /> 
+
+<!--   PingBean2 cannot use container-managed update strategy as it has no 
+       setter methods! If used it will not be updated when its config changes.
+
+       <cm:managed-properties persistent-id="org.apache.karaf.demo.config_admin_demo"
+            update-strategy="container-managed" />
+-->
+    </bean>
+</blueprint>
