@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.karaf.test</groupId>
+  <artifactId>service-resource-loading-example</artifactId>
+  <packaging>pom</packaging>
+  <name>ServiceResourceLoadingExample</name>
+  <version>0.0.1-SNAPSHOT</version>
+  <description></description>
+  <url></url>
+
+  <properties>
+    <slf4j.version>1.7.5</slf4j.version>
+    <spring.maven.artifact.version>3.1.4.RELEASE</spring.maven.artifact.version>
+    <spring.osgi.version>1.2.0</spring.osgi.version>
+    <equinox.ver>3.2.2</equinox.ver>
+    <servicemix-version>4.5.0</servicemix-version>
+    <karaf.version>2.2.5</karaf.version>
+  </properties>
+
+  <modules>
+    <module>serviceBundle</module>
+    <module>clientBundle</module>
+  </modules>
+</project>
