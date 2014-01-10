@@ -13,11 +13,6 @@
 
   <properties>
     <slf4j.version>1.7.5</slf4j.version>
-    <spring.maven.artifact.version>3.1.4.RELEASE</spring.maven.artifact.version>
-    <spring.osgi.version>1.2.0</spring.osgi.version>
-    <equinox.ver>3.2.2</equinox.ver>
-    <servicemix-version>4.5.0</servicemix-version>
-    <karaf.version>2.2.5</karaf.version>
   </properties>
 
   <modules>

@@ -19,7 +19,6 @@
   <reference id="service" interface="org.apache.karaf.demo.osgitest.OSGiTestInterface" availability="mandatory"/>
 
   <bean id="client" class="org.apache.karaf.demo.osgitest.client.Client">
-    <property name="context" ref="blueprintBundleContext"/>
     <property name="service" ref="service" />
   </bean>
 </blueprint>

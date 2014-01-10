@@ -10,6 +10,9 @@
 .settings
 .classpath
 
+# IntelliJ project files # 
+*.iml
+
 # MacOSX specific files #
 .DS_Store
 
