@@ -6,7 +6,9 @@ The service at bundle B is able to load the resource from bundle A.
 
 The main idea is to pass along a url that encodes the bundle id.
 It has the format bundle:[id].[rev]/[path].
-Such url can be constructed using the Bundle.getResource() API.
+Such url can be constructed using the Bundle.getResource(xxx) API but also
+using this.getClass().getClassLoader().getResource(xxx).
+The latter has the advantage of not requiring any OSGi related classes.
 
 
 The demo consists of two sub modules: serviceBundle and clientBundle
@@ -77,4 +79,3 @@ This demo has been tested on JBoss Fuse 6.0.
 14:43:14,566 | INFO  | NAPSHOT-thread-1 | OSGiTestImpl | 289 - service-bundle - 0.0.1.SNAPSHOT |
 14:43:14,566 | DEBUG | NAPSHOT-thread-1 | OSGiTestImpl | 289 - service-bundle - 0.0.1.SNAPSHOT | Done with invokeService()
 14:43:14,566 | DEBUG | NAPSHOT-thread-1 | Client       | 290 - client-bundle - 0.0.1.SNAPSHOT | service() called succesfully.
-
