@@ -60,6 +60,7 @@ If thats the case, follow these steps:
 
 - run `jaas:realms` to verify the login modules got deployed. The output should be similar to
 
+```
   JBossFuse:karaf@root> jaas:realms
   Index Realm                Module Class
       1 karaf                org.apache.karaf.jaas.modules.properties.PropertiesLoginModule
@@ -67,15 +68,18 @@ If thats the case, follow these steps:
       3 karaf                io.fabric8.jaas.ZookeeperLoginModule
       4 karaf                org.apache.karaf.jaas.modules.ldap.LDAPLoginModule
       5 karaf                io.fabric8.jaas.ZookeeperLoginModule
-
+```
 
 - add a sample user to the new ZookeeperLoginModule definition:
+
+```
   jaas:manage --index 5
   jaas:useradd testUser secret
   jaas:roleadd testUser admin
   jaas:update
   jaas:manage --index 5
   jaas:users
+```
 
   should list the new user testUser with the last command.
 
