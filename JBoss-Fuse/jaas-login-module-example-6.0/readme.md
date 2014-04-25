@@ -11,6 +11,9 @@ ZookeeperLoginModule or in LDAP.
 This is achieved by configuring a new ZookeeperLoginModule using a higher rank 4 than the default ZookeeperLoginModule
 and by assigning it the flag sufficient.
 In addition an LDAP login module is configured next with the same flag sufficient.
+The documenation for these flags can be found at
+http://docs.oracle.com/javase/6/docs/api/javax/security/auth/login/Configuration.html
+
 In essence the configuration is as follows (some details omitted for clarity).
 
 ```xml

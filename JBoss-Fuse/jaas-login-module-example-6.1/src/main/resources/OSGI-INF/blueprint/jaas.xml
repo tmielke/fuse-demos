@@ -22,8 +22,10 @@
       <cm:property name="encryption.encoding" value="hexadecimal" />
     </cm:default-properties>
   </cm:property-placeholder>
-  
+
+  <!-- Note the higher rank 4 will overwrite the default ZookeeperLoginModule -->
   <jaas:config name="karaf" rank="4">
+      <!-- Note we declare two login modules, both with sufficient flag -->
     <jaas:module className="io.fabric8.jaas.ZookeeperLoginModule" flags="sufficient">
       path = /fabric/authentication/users
       encryption.name = ${encryption.name}
