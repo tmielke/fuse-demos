@@ -54,11 +54,11 @@ Make sure the LDAPLoginModule is correctly configured to work against your LDAP 
 If thats the case, follow these steps:
 
 - Start JBoss Fuse 6.1
-- create a Fabric (if not already done) using fabric:create --clean
-- add this demo bundle to the `fabric` profile:
+- Create a Fabric (if not already done) using fabric:create --clean
+- Add this demo bundle to the `fabric` profile:
   fabric:profile-edit --bundles io/fabric8/jaas/test/jaas-login-module-example/6.1 fabric
 
-- run `jaas:realms` to verify the login modules got deployed. The output should be similar to
+- Run `jaas:realms` to verify the login modules got deployed. The output should be similar to
 
 ```
   JBossFuse:karaf@root> jaas:realms
@@ -70,7 +70,7 @@ If thats the case, follow these steps:
       5 karaf                io.fabric8.jaas.ZookeeperLoginModule
 ```
 
-- add a sample user to the new ZookeeperLoginModule definition:
+- Add a sample user to the new ZookeeperLoginModule definition:
 
 ```
   jaas:manage --index 5
@@ -83,7 +83,7 @@ If thats the case, follow these steps:
 
   should list the new user testUser with the last command.
 
-- test the JAAS configuration using the bin/client script of JBoss Fuse 6.1
+- Test the JAAS configuration using the bin/client script of JBoss Fuse 6.1
   `bin/client -u testUser -p secret` should succeed the authentication
 
   `bin/client -u <ldapUser> -p <ldapPassword>`
