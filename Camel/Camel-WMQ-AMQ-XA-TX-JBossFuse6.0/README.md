@@ -1,7 +1,7 @@
 ## Camel-WMQ-AMQ-XA-TX Demo
 
 Verified and tested against JBoss Fuse 6.0.
-
+Should also work on ServiceMix 4.4.x.
 
 A Camel demo that shows how to use XA transactions with Camel
 across two different JMS providers, ActiveMQ and WebSphere MQ.
@@ -177,18 +177,16 @@ up to 4.4.1-fuse-03-06.
   something wrong with the Ariex TX manager config. Resolve this error first
   before continuing. See pre-requisites above.
 
-
-## Running
-
-- Start JBoss Fuse 6.0
-
 - From the Karaf shell enter:
   ```
   features:addurl  mvn:org.apache.camel.demo.camel-wmq-amq-xa-tx/features/1.0.0/xml/features
   features:install camel-wmq-amq-xa-tx-demo
   ```
-
 - Check that all bundles get deployed and start up successfully. 
+
+
+
+## Running
 
 - If you like to see proper logging about each XA begin/commit, then
   set the following logging configuration:
@@ -203,6 +201,7 @@ up to 4.4.1-fuse-03-06.
   log:set TRACE org.apache.geronimo.transaction.manager.WrapperNamedXAResource
   log:set DEBUG org.apache.activemq.TransactionContext
   log:set DEBUG org.apache.geronimo.transaction.log
+  log:set DEBUG org.fusesource.jms.pool
 ```
 - Send a few messages to the WebSphere MQSeries broker on destination IN. 
 
@@ -211,10 +210,10 @@ up to 4.4.1-fuse-03-06.
   ActiveMQ broker using JMX and verify that messages got enqueued to queue IN.
 
 
-###For testing Aries transaction recoverability:
+### For testing Aries transaction recoverability:
 
 - Start JBoss Fuse 6.0 using this simple loop from command line:
-  `while [ 1=1 ]; do ./servicemix ;  sleep 10; done`
+  `while [ 1=1 ]; do ./fuse ;  sleep 10; done`
 
 - Send 10000 msgs to IN on WMQ.
   The Message content does not matter.
@@ -222,7 +221,7 @@ up to 4.4.1-fuse-03-06.
 - Check the ActiveMQ broker's OUT queue, messages should get routed rather slowly 
   to that destination.
 
-- In a shell window run `./kill-script.sh` to kill SMX 10 times every two 
+- In a shell window run `./kill-script.sh` to kill JBoss Fuse 10 times every two 
   minutes. On the restart of JBoss Fuse it will recover any pending transactions 
   from the transaction manager recovery log.
 
