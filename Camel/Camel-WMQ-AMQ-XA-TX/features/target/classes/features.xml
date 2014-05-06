@@ -80,7 +80,7 @@ permissions and limitations under the License.
         <feature>activemq-client</feature>
 
         <!-- finally the demo routing bundle -->
-        <bundle>mvn:${project.groupId}/routing/${project.version}</bundle>
+        <bundle>mvn:org.apache.camel.demo.camel-wmq-amq-xa-tx/routing/1.0.0</bundle>
     </feature>
 </features>
 

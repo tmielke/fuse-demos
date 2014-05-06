@@ -118,6 +118,7 @@ permissions and limitations under the License.
 
     <!-- For ActiveMQ 5.9.0 (JBoss Fuse 6.1) and higher -->
     <bean id="FuseWmqXaConnectionFactory" class="org.apache.activemq.jms.pool.JcaPooledConnectionFactory">
+        <!-- make sure to set property xaConnectionFactory and not connectionFactory -->
         <property name="connectionFactory" ref="WMQConnectionFactory"/>
         <property name="transactionManager" ref="transactionManager"/>
         <property name="maxConnections" value="5"/>

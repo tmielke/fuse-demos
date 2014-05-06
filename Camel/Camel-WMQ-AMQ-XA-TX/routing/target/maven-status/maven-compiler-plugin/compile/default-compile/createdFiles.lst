@@ -1,0 +1,4 @@
+org/springframework/jms/connection/xa/UserCredentialsConnectionFactoryAdapterXA$JmsUserCredentials.class
+org/apache/camel/demo/camel_wmq_amq_xa_tx/TestProcessor.class
+org/springframework/jms/connection/xa/UserCredentialsConnectionFactoryAdapterXA.class
+org/springframework/jms/connection/xa/UserCredentialsConnectionFactoryAdapterXA$1.class

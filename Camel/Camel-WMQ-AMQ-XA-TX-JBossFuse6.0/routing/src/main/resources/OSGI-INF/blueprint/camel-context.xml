@@ -98,8 +98,6 @@ permissions and limitations under the License.
         <property name="transactionManager" ref="recoverableTxManager" />
         <property name="connectionFactory" ref="AmqXaCF" />
         <property name="resourceName" value="activemq.default" />
-        <property name="userName" value="admin" />
-	<property name="password" value="admin" />
     </bean>
 
 
@@ -116,43 +114,32 @@ permissions and limitations under the License.
         <property name="cacheLevelName" value="CACHE_CONNECTION" />
     </bean>
 
-    <!-- For ActiveMQ 5.9.0 (JBoss Fuse 6.1) and higher -->
-    <bean id="FuseWmqXaConnectionFactory" class="org.apache.activemq.jms.pool.JcaPooledConnectionFactory">
-        <property name="connectionFactory" ref="WMQConnectionFactory"/>
+    <bean id="FuseWmqXaConnectionFactory" class="org.fusesource.jms.pool.JcaPooledConnectionFactory">
+        <!-- make sure to set property xaConnectionFactory and not connectionFactory -->
+        <property name="xaConnectionFactory" ref="WMQConnectionFactory"/>
         <property name="transactionManager" ref="transactionManager"/>
         <property name="maxConnections" value="5"/>
         <!-- note we set a unique name for the XA resource" -->
         <property name="name" value="ibm-wmq" />
     </bean>
 
-    <!-- -->
     <bean id="WMQConnectionFactory" class="com.ibm.mq.jms.MQXAConnectionFactory">
-        <property name="hostName" value="192.168.178.25" />
+        <property name="hostName" value="192.168.178.52" />
         <property name="port" value="1414" />
         <property name="queueManager" value="QM_VM" />
         <property name="channel" value="TEST" />
         <property name="transportType" value="1" />
     </bean>
-    <!--
-    <bean id="WMQConnectionFactory" class="com.ibm.mq.jms.MQXAConnectionFactory">
-        <property name="hostName" value="10.10.178.20" />
-        <property name="port" value="1414" />
-        <property name="queueManager" value="REDHAT.QUEUE.MANAGER" />
-        <property name="channel" value="SYSTEM.DEF.SVRCONN" />
-        <property name="transportType" value="1" />
-    </bean>
-    -->
 
     <!-- A ResourceManager is used to recover any pending tx after a crash.
          You need a ResourceManager definition per XA resource.
          Note the ResourceManger gets the same unique name set as the 
          JMS ConnectionFactory
     -->
-    <bean id="resourceManager-WMQ" class="org.apache.activemq.jms.pool.GenericResourceManager" init-method="recoverResource">
+    <bean id="resourceManager-WMQ" class="org.fusesource.jms.pool.GenericResourceManager" init-method="recoverResource">
         <property name="connectionFactory" ref="WMQConnectionFactory" />
         <property name="transactionManager" ref="recoverableTxManager" />
         <!-- name needs to match name property set on JcaPooledConnectionFactory above -->
         <property name="resourceName" value="ibm-wmq" />
     </bean>
-
 </blueprint>

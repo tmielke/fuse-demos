@@ -19,23 +19,13 @@ permissions and limitations under the License.
     <feature version="1.0.0" name="camel-wmq-amq-xa-tx-demo">
 
         <!-- Prerequisite bundles -->
-<!--
         <bundle>mvn:org.apache.geronimo.components/geronimo-connector/2.2</bundle>
         <bundle>mvn:org.apache.geronimo.specs/geronimo-j2ee-connector_1.5_spec/2.0.0</bundle>
--->
-        <!-- jms-pool - a generic JMS ConnectionFactory that wraps the WebSphere MQ driver
-             and enlists it in the Aries transaction manager. As of ActiveMQ 5.9.0
+
+        <!-- jmspool - the generic JMS ConnectionFactory. As of ActiveMQ 5.9.0
              you will find this pool in the activemq-jms-pool artifact.
-	     JBoss Fuse already installs and exports the classes of activemq-jms-pool 
-             in the activemq-osgi bundle. So no extra import needed.
-             In a plain Karaf container you would want to import
-              <bundle>wrap:mvn:org.apache.activemq/activemq-jms-pool/5.9.0</bundle>
-
-	     For versions earlier than ActiveMQ 5.9.0, use must use the older jmspool project.
-             <bundle>mvn:org.fusesource.jms/jmspool/1.1</bundle>
         -->
-       
-
+        <bundle>mvn:org.fusesource.jms/jmspool/1.1</bundle>
 
         <!-- WebSphere MQ Series 7.0.1.8 OSGi bundles no included in the demo -->
 	<!--
@@ -63,7 +53,6 @@ permissions and limitations under the License.
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5/com.ibm.msg.client.osgi.nls_7.5.0.0.jar</bundle>
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5/com.ibm.mq.osgi.directip_7.5.0.0.jar</bundle>
 	-->
-
         <!-- WebSphere MQ Series 7.5.0.2 OSGi bundles no included in the demo -->
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5.0.2/com.ibm.mq.osgi.java_7.5.0.2.jar</bundle>
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5.0.2/com.ibm.msg.client.osgi.jms_7.5.0.2.jar</bundle>
@@ -75,9 +64,8 @@ permissions and limitations under the License.
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5.0.2/com.ibm.msg.client.osgi.nls_7.5.0.2.jar</bundle>
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5.0.2/com.ibm.mq.osgi.directip_7.5.0.2.jar</bundle>
 
-
         <!-- client side ActiveMQ libraries -->
-        <feature>activemq-client</feature>
+        <feature version="5.8.0.redhat-60024">activemq-client</feature>
 
         <!-- finally the demo routing bundle -->
         <bundle>mvn:${project.groupId}/routing/${project.version}</bundle>

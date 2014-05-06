@@ -1,6 +1,6 @@
 ## Camel-WMQ-AMQ-XA-TX Demo
 
-Verified and tested against JBoss Fuse 6.1.
+Verified and tested against JBoss Fuse 6.0.
 
 
 A Camel demo that shows how to use XA transactions with Camel
@@ -57,6 +57,11 @@ This demo contains two subdirectories:
 
 
 ### Important things to notice about XA transactions:
+1) Some extra configuration is needed to run this demo successfully on versions 
+   up to SMX 4.4.1-fuse-03-06. This is due to ESB-1683, ESB-1711 and ESB-1722. 
+   See steps below for details. Its recommended to run this demo on 
+   JBoss Fuse 6.0
+
 2) There are two separate camel-jms component configurations used in this demo.
    One component uses the embedded ActiveMQ broker listening on 
    localhost:616161, the other connects to an external WebSphere MQSeries 
@@ -85,9 +90,6 @@ This demo contains two subdirectories:
    that supports pooling and also the NamedXAResource interface. 
    This was the start of the jmspool project hosted a github.
    https://github.com/fusesource/jmspool.
-   As of ActiveMQ 5.9.0 this jmspool project was moved to the ActiveMQ source 
-   code base and can be found in the activemq-jms-pool directory of the source
-   tree.
    In order to have WebSphereMQ participating fully into the XA transaction,
    you need to wrap the WMQ JMS driver into this generic ConnectionFactory.  
    This is done in this demo, see camel-context.xml.
@@ -114,6 +116,43 @@ This demo contains two subdirectories:
 mvn clean install
 
 
+### Pre-requisite configuration for ServiceMix 4.4.1-fuse-03-06 and older
+
+Skip this entire section if you are using JBoss Fuse 6.0 or later.
+
+This demo is build for JBoss Fuse 6.0 but can be run on older versions
+of Fuse ESB Enterprise and Fuse ESB as well. You will need to downgrade the 
+Camel and ActiveMQ versions in the top level pom.xml though. 
+
+Due to some bugs found in ServiceMix 4.4.1-fuse-03-06 some extra configuration is 
+required on that version. Subsequent versions of ServiceMix will have these 
+bugs fixed. So these steps are only needed on ServiceMix versions prior and
+up to 4.4.1-fuse-03-06.
+
+- cp org.apache.aries.transaction.manager-0.3.1-fuse-SNAPSHOT.jar from ESB-1683 to 
+  SMX_HOME/system/org/apache/aries/transaction/org.apache.aries.transaction.manager/0.3/org.apache.aries.transaction.manager-0.3.jar
+  Direct download link to file:
+  http://fusesource.com/issues/secure/attachment/23152/org.apache.aries.transaction.manager-0.3.1-fuse-SNAPSHOT.jar
+  
+- Delete the SMX data folder, so that the above new jar file gets redeployed
+  on startup of SMX.
+
+- Edit etc/org.apache.aries.transaction.cfg and add
+  aries.transaction.recoverable=true
+  This enables tx recovery in Aries.
+
+- Edit etc/activemq-broker.xml 
+  - add namespace def
+    xmlns:blueprint="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+  - to <broker> bean add the property
+    blueprint:id="broker"
+  - add line 
+    <reference id="recoverableTxManager" interface="org.apache.geronimo.transaction.manager.RecoverableTransactionManager" availability="mandatory" />
+  - change resourceManager bean and replace tx manager with
+    <property name="transactionManager" ref="recoverableTxManager" />
+
+
+
 ## Deploying
 
 - Edit `src/main/resources/OSGI-INF/blueprint/camel-context.xml` of this demo
@@ -130,9 +169,18 @@ mvn clean install
    of these files as listed in this features.xml.
 
 - Start your WebSphere MQSeries broker and ensure the broker details match the
-  configuration supplied in camel-context.xml of this demo. 
+  configuration supplied in camel-context.xml of this demo.
 
-- Start JBoss Fuse 6.1
+- Start JBoss Fuse 6.0.
+  If you use ServiceMix 4,4,1-fuse-03-06 or older 
+  check that the data/txlog folder is created. If not, then there is
+  something wrong with the Ariex TX manager config. Resolve this error first
+  before continuing. See pre-requisites above.
+
+
+## Running
+
+- Start JBoss Fuse 6.0
 
 - From the Karaf shell enter:
   ```
@@ -141,16 +189,6 @@ mvn clean install
   ```
 
 - Check that all bundles get deployed and start up successfully. 
-
-
-
-## Running
-
-- Send a test message to the queue 'IN' on WebSphere MQ.
-
-- Observe the JBoss Fuse log file and verify that all messages got routed to 
-  the embedded ActiveMQ broker, destination OUT. You can also connect to the
-  ActiveMQ broker using JMX and verify that messages got enqueued to queue IN.
 
 - If you like to see proper logging about each XA begin/commit, then
   set the following logging configuration:
@@ -165,15 +203,18 @@ mvn clean install
   log:set TRACE org.apache.geronimo.transaction.manager.WrapperNamedXAResource
   log:set DEBUG org.apache.activemq.TransactionContext
   log:set DEBUG org.apache.geronimo.transaction.log
-  log:set DEBUG org.apache.activemq.jms.pool
 ```
+- Send a few messages to the WebSphere MQSeries broker on destination IN. 
 
+- Observe the JBoss Fuse log file and verify that all messages got routed to 
+  the embedded ActiveMQ broker, destination OUT. You can also connect to the
+  ActiveMQ broker using JMX and verify that messages got enqueued to queue IN.
 
 
 ###For testing Aries transaction recoverability:
 
 - Start JBoss Fuse 6.0 using this simple loop from command line:
-  `while [ 1=1 ]; do ./fuse ;  sleep 10; done`
+  `while [ 1=1 ]; do ./servicemix ;  sleep 10; done`
 
 - Send 10000 msgs to IN on WMQ.
   The Message content does not matter.
@@ -181,7 +222,7 @@ mvn clean install
 - Check the ActiveMQ broker's OUT queue, messages should get routed rather slowly 
   to that destination.
 
-- In a shell window run `./kill-script.sh` to kill JBoss Fuse 10 times every two 
+- In a shell window run `./kill-script.sh` to kill SMX 10 times every two 
   minutes. On the restart of JBoss Fuse it will recover any pending transactions 
   from the transaction manager recovery log.
 

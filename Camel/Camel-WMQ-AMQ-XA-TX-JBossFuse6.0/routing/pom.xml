@@ -1,0 +1,78 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.apache.camel.demo</groupId>
+    <artifactId>camel-wmq-amq-xa-tx</artifactId>
+    <version>1.0.0</version>
+  </parent>
+
+  <groupId>org.apache.camel.demo.camel-wmq-amq-xa-tx</groupId>
+  <artifactId>routing</artifactId>
+  <version>1.0.0</version>
+  <name>Camel :: Demo :: Camel-WMQ-AMQ-XA-TX :: Routing</name>
+  <packaging>bundle</packaging>
+  
+  <properties>
+    <servicemix.osgi.import>
+      *
+    </servicemix.osgi.import>
+    <servicemix.osgi.export>
+      org.apache.camel.demo.camel_wmq_amq_xa_tx,
+      org.springframework.jms.connection.xa
+    </servicemix.osgi.export>
+    <servicemix.osgi.bundles />
+    <servicemix.osgi.dynamic.import />
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-core</artifactId>
+      <version>${camel.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-spring</artifactId>
+      <version>${camel.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-client</artifactId>
+      <version>${activemq.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-pool</artifactId>
+      <version>${activemq.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-jms</artifactId>
+        <version>3.2.4.RELEASE</version>
+        <type>jar</type>
+        <scope>compile</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Export-Package>${servicemix.osgi.export}</Export-Package>
+            <Import-Package>${servicemix.osgi.import}</Import-Package>
+            <Require-Bundle>${servicemix.osgi.bundles}</Require-Bundle>
+            <DynamicImport-Package>${servicemix.osgi.dynamic.import}</DynamicImport-Package>
+            <Private-Package>${servicemix.osgi.private}</Private-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
