@@ -1,6 +1,9 @@
 ## Camel-WMQ-AMQ-XA-TX Demo
 
-Verified and tested against JBoss Fuse 6.1.
+
+## This demo needs some refactoring any may not work against latest WMQ servers 
+V
+erified and tested against JBoss Fuse 6.1.
 
 
 A Camel demo that shows how to use XA transactions with Camel
