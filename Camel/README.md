@@ -23,6 +23,10 @@ shows how to route messages in Camel using XA transactions from WebSphere MQ
 to ActiveMQ.
 
 
+## Camel-Jetty-Basic-Auth-Demo
+programmatically configures a camel-jetty endpoint for HTTP Basic Authentication 
+against the JAAS authentication realm provided by the Karaf OSGi container.
+
 ### Camel-Jetty-Client-IP
 Is a simple Camel JUnit test that shows how to extract the client's IP address 
 in a Camel route that consumes from a Jetty HTTP endpoint.
