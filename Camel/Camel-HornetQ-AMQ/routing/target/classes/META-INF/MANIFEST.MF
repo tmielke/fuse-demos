@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1418057188573
+Build-Jdk: 1.7.0_45
+Built-By: tmielke
+Bundle-ManifestVersion: 2
+Bundle-Name: Camel :: Demo :: Camel HornetQ to ActiveMQ :: Routing
+Bundle-SymbolicName: org.apache.camel.demo.camel-hornetq-amq.routing
+Bundle-Version: 1.0.0
+Created-By: Apache Maven Bundle Plugin
+DynamicImport-Package: true
+Import-Package: javax.jms;version="[1.1,2)",org.apache.activemq,org.apac
+ he.activemq.pool,org.apache.camel;version="[2.10,3)",org.apache.camel.c
+ omponent.jms;version="[2.10,3)",org.hornetq.api.core,org.hornetq.api.co
+ re.client,org.hornetq.core.client.impl,org.hornetq.jms.client,org.jboss
+ .naming.remote.client,org.slf4j;version="[1.6,2)",org.springframework.b
+ eans.factory;version="[3.0,4)",org.springframework.core;version="[3.0,4
+ )",org.springframework.jms.connection;version="[3.0,4)",org.springframe
+ work.util;version="[3.0,4)"
+Tool: Bnd-1.50.0

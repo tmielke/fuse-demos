@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xmlns:jee="http://www.springframework.org/schema/jee"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+                http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+                http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <bean id="testProcessor" class="org.apache.camel.demo.camel_hornetq_amq.TestProcessor" >
+      <property name="simulateProcessingError" value="false" />
+      <property name="errorAfterMsgs" value="3" />
+    </bean>
+
+
+    <!-- ******************** Camel route definition  ********************* --> 
+    <camelContext xmlns="http://camel.apache.org/schema/spring">
+        <route id="hornetq-to-amq">
+          <from uri="hornetq:queue:testQueue" />
+          <log message="GOT MESSAGE ################################" />
+          <log message="REDELIVERED: ${header.JMSRedelivered}" />
+          <to uri="amq:queue:OUT" />
+          <process ref="testProcessor" />
+          <log message="AFTER CAMEL PROCESSOR ######################" />
+        </route>
+
+        <!-- This route could be used to push some messages to HornetQ -->
+        <route id="PushMessages">
+          <from uri="timer:Push?repeatCount=10&amp;period=1000"/>
+          <setBody>
+            <constant>Hello World.</constant>
+          </setBody>
+          <log message="${body}"/>
+          <to uri="hornetq:queue:testQueue"/>
+        </route>
+    </camelContext> 
+
+
+    <!-- ********************* HornetQ configuration ****************** -->
+    <bean id="hornetq" class="org.apache.camel.component.jms.JmsComponent">
+      <property name="configuration" ref="HQConfig" />
+    </bean>
+
+    <bean id="HQConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+      <property name="connectionFactory" ref="CF-Wrapper" />
+      <property name="transacted" value="false" />
+      <property name="maxConcurrentConsumers" value="1" />
+      <property name="cacheLevelName" value="CACHE_CONNECTION" />
+    </bean>
+
+
+    <!-- Perhaps there is a better way to pass in credentials? -->
+    <bean id="CF-Wrapper" class="org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter">
+        <property name="targetConnectionFactory" ref="HornetQ-CF"/>
+        <property name="username" value="hornetq"/>
+        <property name="password" value="hornetq!123"/>
+    </bean>
+
+   <!-- jndi name from standalone-full.xml:
+          java:jboss/exported/jms/RemoteConnectionFactory
+        but really need to use a lookup name without 'java:jboss/exported/'
+   -->
+   <jee:jndi-lookup id="HornetQ-CF" jndi-name="jms/RemoteConnectionFactory">
+      <!-- needs to point to JNDI service of JBoss EAP -->
+      <jee:environment>
+        java.naming.factory.initial=org.jboss.naming.remote.client.InitialContextFactory
+        java.naming.provider.url=remote://localhost:4447
+        java.naming.security.principal=admin
+        java.naming.security.credentials=admin!123
+      </jee:environment>
+    </jee:jndi-lookup>
+
+
+
+    <!-- ********************* AMQ configuration ************************** -->
+    <bean id="amq" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="configuration" ref="AMQConfig" />
+    </bean>
+
+    <bean id="AMQConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+        <property name="connectionFactory" ref="AmqPCF" />
+        <property name="transacted" value="false" />
+        <property name="maxConcurrentConsumers" value="1" />
+        <property name="cacheLevelName" value="CACHE_COSUMER" />
+    </bean>
+
+    <bean id="AmqPCF" class="org.apache.activemq.pool.PooledConnectionFactory">
+        <property name="connectionFactory" ref="AmqCF" />
+        <property name="maxConnections" value="1" />
+    </bean>
+
+    <bean id="AmqCF" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="failover:(tcp://localhost:61616)?jms.prefetchPolicy.all=1" />
+        <property name="userName" value="admin" />
+        <property name="password" value="admin" />
+    </bean>
+
+</beans>

@@ -1,0 +1,91 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.apache.camel.demo</groupId>
+    <artifactId>camel-hornetq-amq</artifactId>
+    <version>1.0.0</version>
+  </parent>
+
+  <groupId>org.apache.camel.demo.camel-hornetq-amq</groupId>
+  <artifactId>routing</artifactId>
+  <version>1.0.0</version>
+  <name>Camel :: Demo :: Camel HornetQ to ActiveMQ :: Routing</name>
+  <packaging>bundle</packaging>
+  
+  <properties>
+  <!-- unless dynamic import is enabled, a bunch of HornetQ packages are required -->
+    <servicemix.osgi.import>
+      javax.jms;version="[1.1,2)",
+      org.apache.camel;version="[2.10,3)",
+      org.jboss.naming.remote.client,
+      org.slf4j;version="[1.6,2)",
+      org.springframework.beans.factory,
+      org.springframework.core,
+      org.springframework.util,
+      org.hornetq.jms.client,
+      org.hornetq.api.core.client,
+      org.hornetq.core.client.impl,
+      org.hornetq.api.core,
+      *
+    </servicemix.osgi.import>
+    <servicemix.osgi.export />
+    <servicemix.osgi.bundles />
+    <servicemix.osgi.dynamic.import />
+    <servicemix.osgi.private>org.apache.camel.demo.camel_hornetq_amq</servicemix.osgi.private>
+  </properties>
+
+  <dependencies>
+
+    <!--  
+    <dependency>
+      <groupId>org.jboss.as</groupId>
+      <artifactId>jboss-as-appclient</artifactId>
+      <version>7.2.0.Final</version>
+      <type>jar</type>
+      <scope>provided</scope>
+    </dependency>
+    -->
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-jms</artifactId>
+      <version>${camel.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-spring</artifactId>
+      <version>${camel.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-client</artifactId>
+      <version>${activemq.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-pool</artifactId>
+      <version>${activemq.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Export-Package>${servicemix.osgi.export}</Export-Package>
+            <Import-Package>${servicemix.osgi.import}</Import-Package>
+            <Require-Bundle>${servicemix.osgi.bundles}</Require-Bundle>
+            <Private-Package>${servicemix.osgi.private}</Private-Package>
+            <DynamicImport-Package>true</DynamicImport-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
