@@ -64,7 +64,18 @@ permissions and limitations under the License.
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5/com.ibm.mq.osgi.directip_7.5.0.0.jar</bundle>
 	-->
 
-        <!-- WebSphere MQ Series 7.5.0.2 OSGi bundles no included in the demo -->
+        <!-- WebSphere MQ Series 7.5.0.2 OSGi bundles no included in the demo 
+
+	     I have problems with this driver, the initial connection to WMQ raises
+             "Cause: Error while attempting to add new Connection to the pool; nested 
+             exception is com.ibm.msg.client.jms.DetailedJMSSecurityException: 
+             JMSWMQ2013: The security authentication was not valid that was supplied 
+             for QueueManager 'REDHAT.QUEUE.MANAGER' with connection mode 'Client' 
+             and host name '10.10.178.20(1414)'.
+             Please check if the supplied username and password are correct on the 
+             QueueManager to which you are connecting."
+        -->
+	
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5.0.2/com.ibm.mq.osgi.java_7.5.0.2.jar</bundle>
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5.0.2/com.ibm.msg.client.osgi.jms_7.5.0.2.jar</bundle>
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5.0.2/com.ibm.msg.client.osgi.jms.prereq_7.5.0.2.jar</bundle>
@@ -74,7 +85,7 @@ permissions and limitations under the License.
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5.0.2/com.ibm.msg.client.osgi.commonservices.j2se_7.5.0.2.jar</bundle>
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5.0.2/com.ibm.msg.client.osgi.nls_7.5.0.2.jar</bundle>
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5.0.2/com.ibm.mq.osgi.directip_7.5.0.2.jar</bundle>
-
+	 
 
         <!-- client side ActiveMQ libraries -->
         <feature>activemq-client</feature>

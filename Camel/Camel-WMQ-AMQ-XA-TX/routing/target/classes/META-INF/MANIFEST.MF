@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1399372067580
+Bnd-LastModified: 1399391753596
 Build-Jdk: 1.7.0_45
 Built-By: tmielke
 Bundle-ManifestVersion: 2
@@ -17,8 +17,8 @@ Import-Package: com.ibm.mq.jms,javax.jms;version="[1.1,2)",javax.transac
  jms,org.apache.camel.spring.spi;version="[2.10,3)",org.apache.geronimo.
  transaction.manager,org.osgi.service.blueprint;version="[1.0.0,2.0.0)",
  org.slf4j;version="[1.6,2)",org.springframework.beans.factory,org.sprin
- gframework.core,org.springframework.transaction;version="[3.0,4)",org.s
- pringframework.util
+ gframework.core,org.springframework.jms.connection,org.springframework.
+ transaction;version="[3.0,4)",org.springframework.util
 Import-Service: javax.transaction.TransactionManager;multiple:=false,org
  .apache.geronimo.transaction.manager.RecoverableTransactionManager;mult
  iple:=false,org.springframework.transaction.PlatformTransactionManager;

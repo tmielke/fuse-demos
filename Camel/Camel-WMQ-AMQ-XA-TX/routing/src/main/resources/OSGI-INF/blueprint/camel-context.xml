@@ -118,14 +118,14 @@ permissions and limitations under the License.
 
     <!-- For ActiveMQ 5.9.0 (JBoss Fuse 6.1) and higher -->
     <bean id="FuseWmqXaConnectionFactory" class="org.apache.activemq.jms.pool.JcaPooledConnectionFactory">
-        <property name="connectionFactory" ref="WMQConnectionFactory"/>
+        <property name="connectionFactory" ref="WMQ-CF-Wrapper"/>
         <property name="transactionManager" ref="transactionManager"/>
-        <property name="maxConnections" value="5"/>
+        <property name="maxConnections" value="1"/>
         <!-- note we set a unique name for the XA resource" -->
         <property name="name" value="ibm-wmq" />
     </bean>
 
-    <!-- -->
+    <!--
     <bean id="WMQConnectionFactory" class="com.ibm.mq.jms.MQXAConnectionFactory">
         <property name="hostName" value="192.168.178.25" />
         <property name="port" value="1414" />
@@ -133,7 +133,8 @@ permissions and limitations under the License.
         <property name="channel" value="TEST" />
         <property name="transportType" value="1" />
     </bean>
-    <!--
+    -->
+    <!-- -->
     <bean id="WMQConnectionFactory" class="com.ibm.mq.jms.MQXAConnectionFactory">
         <property name="hostName" value="10.10.178.20" />
         <property name="port" value="1414" />
@@ -141,7 +142,13 @@ permissions and limitations under the License.
         <property name="channel" value="SYSTEM.DEF.SVRCONN" />
         <property name="transportType" value="1" />
     </bean>
-    -->
+
+  
+    <bean id="WMQ-CF-Wrapper" class="org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter">
+        <property name="targetConnectionFactory" ref="WMQConnectionFactory"/>
+	<property name="username" value="redhat"/>
+	<property name="password" value="redhat"/>
+    </bean>
 
     <!-- A ResourceManager is used to recover any pending tx after a crash.
          You need a ResourceManager definition per XA resource.
@@ -153,6 +160,8 @@ permissions and limitations under the License.
         <property name="transactionManager" ref="recoverableTxManager" />
         <!-- name needs to match name property set on JcaPooledConnectionFactory above -->
         <property name="resourceName" value="ibm-wmq" />
+        <property name="userName" value="redhat" /> 
+        <property name="password" value="redhat" />
     </bean>
 
 </blueprint>
