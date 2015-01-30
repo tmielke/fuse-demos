@@ -62,6 +62,7 @@
       <entry key="aries.xa.poolMinSize" value="0" />
       <entry key="aries.xa.poolMaxSize" value="5" />
       <entry key="aries.xa.name" value="mysqlDS" />      
+      <entry key="aries.xa.exceptionSorter" value="known" />
     </service-properties>
   </service>
 </blueprint>
