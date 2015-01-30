@@ -4,6 +4,11 @@
 quick demo that show how to proxy HTTP requests. 
 
 
+### Camel-HornetQ-AMQ
+routes messages from an external HornetQ broker to an embedded ActiveMQ broker 
+(non transactional)
+
+
 ### Camel-JMS-JDBC 
 shows how to route messages in Camel from a JMS broker into a JDBC database.
 
