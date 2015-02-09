@@ -1,5 +1,9 @@
 ## This directory contains Camel related demos
 
+### Camel-Fabric-Master-Component/
+uses the Camel Fabric master component to create an exclusive consumer endpoint
+
+
 ### Camel-HTTP-Proxy
 quick demo that show how to proxy HTTP requests. 
 
