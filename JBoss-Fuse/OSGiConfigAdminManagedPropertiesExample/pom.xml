@@ -27,11 +27,11 @@
 
 
   <properties>
-    <servicemix.osgi.export>org.apache.karaf.demo</servicemix.osgi.export>
-    <servicemix.osgi.import>*</servicemix.osgi.import>
-    <servicemix.osgi.bundles/>
-    <servicemix.osgi.dynamic.import></servicemix.osgi.dynamic.import>
-    <servicemix.osgi.private>org.apache.karaf.demo.impl</servicemix.osgi.private>
+    <osgi.export>org.apache.karaf.demo</osgi.export>
+    <osgi.import>*</osgi.import>
+    <osgi.bundles/>
+    <osgi.dynamic.import></osgi.dynamic.import>
+    <osgi.private>org.apache.karaf.demo.impl</osgi.private>
   </properties> 
 
   <dependencies>
@@ -65,11 +65,11 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Export-Package>${servicemix.osgi.export}</Export-Package>
-            <Import-Package>${servicemix.osgi.import}</Import-Package>
-            <Require-Bundle>${servicemix.osgi.bundles}</Require-Bundle>
-            <DynamicImport-Package>${servicemix.osgi.dynamic.import}</DynamicImport-Package>
-            <Private-Package>${servicemix.osgi.private}</Private-Package>
+            <Export-Package>${osgi.export}</Export-Package>
+            <Import-Package>${osgi.import}</Import-Package>
+            <Require-Bundle>${osgi.bundles}</Require-Bundle>
+            <DynamicImport-Package>${osgi.dynamic.import}</DynamicImport-Package>
+            <Private-Package>${osgi.private}</Private-Package>
           </instructions>
         </configuration>
       </plugin>
