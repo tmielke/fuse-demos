@@ -28,7 +28,7 @@ permissions and limitations under the License.
         <bundle>mvn:org.fusesource.jms/jmspool/1.1</bundle>
 
         <!-- WebSphere MQ Series 7.0.1.8 OSGi bundles no included in the demo -->
-	<!--
+	
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.0.1.8/com.ibm.mq.osgi.java_7.0.1.8.jar</bundle>
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.0.1.8/com.ibm.msg.client.osgi.jms_7.0.1.8.jar</bundle>
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.0.1.8/com.ibm.msg.client.osgi.jms.prereq_7.0.1.8.jar</bundle>
@@ -39,7 +39,7 @@ permissions and limitations under the License.
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.0.1.8/com.ibm.mq.osgi.xa_7.0.1.8.jar</bundle>
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.0.1.8/com.ibm.msg.client.osgi.nls_7.0.1.8.jar</bundle>
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.0.1.8/com.ibm.mq.osgi.directip_7.0.1.8.jar</bundle>
-	-->
+	
 
         <!-- WebSphere MQ Series 7.5 OSGi bundles no included in the demo -->
 	<!--
@@ -54,6 +54,7 @@ permissions and limitations under the License.
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5/com.ibm.mq.osgi.directip_7.5.0.0.jar</bundle>
 	-->
         <!-- WebSphere MQ Series 7.5.0.2 OSGi bundles no included in the demo -->
+	<!--
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5.0.2/com.ibm.mq.osgi.java_7.5.0.2.jar</bundle>
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5.0.2/com.ibm.msg.client.osgi.jms_7.5.0.2.jar</bundle>
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5.0.2/com.ibm.msg.client.osgi.jms.prereq_7.5.0.2.jar</bundle>
@@ -63,6 +64,8 @@ permissions and limitations under the License.
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5.0.2/com.ibm.msg.client.osgi.commonservices.j2se_7.5.0.2.jar</bundle>
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5.0.2/com.ibm.msg.client.osgi.nls_7.5.0.2.jar</bundle>
         <bundle>file:/Users/tmielke/Desktop/sandbox/WebSpherePackages/MQSeries/WMQ-JavaDriver/7.5.0.2/com.ibm.mq.osgi.directip_7.5.0.2.jar</bundle>
+	-->
+
 
         <!-- client side ActiveMQ libraries -->
         <feature version="5.8.0.redhat-60024">activemq-client</feature>

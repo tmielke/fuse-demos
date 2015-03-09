@@ -143,8 +143,8 @@ permissions and limitations under the License.
         <property name="transportType" value="1" />
     </bean>
 
-  
-    <bean id="WMQ-CF-Wrapper" class="org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter">
+
+    <bean id="WMQ-CF-Wrapper" class="org.springframework.jms.connection.xa.UserCredentialsConnectionFactoryAdapterXA">
         <property name="targetConnectionFactory" ref="WMQConnectionFactory"/>
 	<property name="username" value="redhat"/>
 	<property name="password" value="redhat"/>
@@ -156,7 +156,7 @@ permissions and limitations under the License.
          JMS ConnectionFactory
     -->
     <bean id="resourceManager-WMQ" class="org.apache.activemq.jms.pool.GenericResourceManager" init-method="recoverResource">
-        <property name="connectionFactory" ref="WMQConnectionFactory" />
+        <property name="connectionFactory" ref="WMQ-CF-Wrapper" />
         <property name="transactionManager" ref="recoverableTxManager" />
         <!-- name needs to match name property set on JcaPooledConnectionFactory above -->
         <property name="resourceName" value="ibm-wmq" />

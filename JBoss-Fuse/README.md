@@ -1,6 +1,6 @@
 #Overview
 
-This directory contains some OSGi/Karaf/ServiceMix specific demos.
+This directory contains some JBoss-Fuse / Karaf / OSGi specific demos.
 
 ## JBoss-Client-OSGi
 OSGi bundle that invokes a J2EE bean deployed in JBoss EAP.
