@@ -50,21 +50,24 @@ managed environment.
   ```
 
 - osgi:install mvn:org.apache.karaf.demo/config-admin-example/1.0-SNAPSHOT
-- start <bundle>
+- start `<bundle>`
 
   Notice the output to the Karaf log file as well as on the Karaf console.
   If you make any changes to this configuration via config:edit this will cause
   the new configuration to be set on the bean again. 
 
 - Verify configuration changes get pushed to the beans:
-    config:edit org.apache.karaf.demo.config_admin_demo
-    config:propset jettyPort 9500
-    config:update
+  ``` 
+  config:edit org.apache.karaf.demo.config_admin_demo
+  config:propset jettyPort 9500
+  config:update
+  ``` 
   This should trigger an update to the bean. Check the Karaf log file for the 
   lines containing
-    setJettyPort(9500)
-    setConfig() called. Received properties {...}
-
+  ``` 
+  setJettyPort(9500)
+  setConfig() called. Received properties {...}
+  ```
 
 ### Fabric managed environment
 
@@ -86,12 +89,15 @@ by modifying the config file in your Fabric profile, this will cause the new
 config to be set on the bean again. 
 
 Verify configuration changes get pushed to the beans:
-  config:edit org.apache.karaf.demo.config_admin_demo
-  config:propset jettyPort 9500
-  config:update
+```
+config:edit org.apache.karaf.demo.config_admin_demo
+config:propset jettyPort 9500
+config:update
+```
 This should trigger an update to the bean. Check the Karaf log file for the 
 lines containing
+  ```
   setJettyPort(9500)
   setConfig() called. Received properties {...}
-
+  ```
 
