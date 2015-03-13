@@ -1,6 +1,6 @@
 # JAAS Login Module Example
 
-Verified on JBoss Fuse 6.1.
+Verified on JBoss Fuse 6.1. However please take note of bug https://issues.jboss.org/browse/FABRIC-1154.
 
 This demo re-configures the JAAS authentication in a Fabric managed JBoss Fuse 6.1 environment
 to offer a fallback mechanism. A user that is not authenticated by the default ZookeeperLoginModule
