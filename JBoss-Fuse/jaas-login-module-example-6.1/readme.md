@@ -22,7 +22,7 @@ In essence the configuration is as follows (some details omitted for clarity).
       ...
     </jaas:module>
 
-    <jaas:module className="org.apache.karaf.jaas.modules.ldap.LDAPLoginModule" flags="required">
+    <jaas:module className="org.apache.karaf.jaas.modules.ldap.LDAPLoginModule" flags="sufficient">
       ...
     </jaas:module>
   </jaas:config>
