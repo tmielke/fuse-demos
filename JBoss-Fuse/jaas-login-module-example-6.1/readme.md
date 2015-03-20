@@ -56,6 +56,7 @@ If thats the case, follow these steps:
 - Start JBoss Fuse 6.1
 - Create a Fabric (if not already done) using fabric:create --clean
 - Add this demo bundle to the `fabric` profile:
+
   `fabric:profile-edit --bundles io/fabric8/jaas/test/jaas-login-module-example/6.1 fabric`
 
 - Run `jaas:realms` to verify the login modules got deployed. The output should be similar to
