@@ -1,6 +1,14 @@
 # Camel-JMS-JDBC-XA-Transactions demo
 
-Tested against JBoss Fuse 6.0 (RC1).
+Tested against JBoss Fuse 6.0. Not to be used with JBoss Fuse 6.1 or higher!!
+
+This demo is based on demo Camel-JMS-JDBC-XA-TX but works around bug
+ENTESB-633 that is present in JBoss Fuse 6.0. 
+The special configuration used in 
+datasource/src/main/resources/OSGI-INF/blueprint/datasource.xml
+
+should not be applied to other versions than JBoss Fuse 6.0. 
+
 
 A Camel based demo that shows how to correctly use XA transactions across 
 different transactional resources such as JMS and JDBC.
