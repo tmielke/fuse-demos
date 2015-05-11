@@ -1,6 +1,6 @@
 # Camel-JMS-JDBC-XA-Transactions demo
 
-Tested against JBoss Fuse 6.0 (RC1).
+Tested against JBoss Fuse 6.1.
 
 A Camel based demo that shows how to correctly use XA transactions across 
 different transactional resources such as JMS and JDBC.
