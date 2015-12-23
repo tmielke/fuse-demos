@@ -16,3 +16,5 @@
 # MacOSX specific files #
 .DS_Store
 
+# Maven build folder
+target
