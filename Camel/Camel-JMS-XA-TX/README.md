@@ -35,7 +35,7 @@ The only interesting files are:
 
 ## Deploying
 - Start JBoss Fuse
-- `osgi:install -s mvn:com.fusesource.support/camel-jms-xa-tx-demo/0.1`
+- `osgi:install -s mvn:org.apache.camel.demo/camel-jms-xa-tx-demo/0.1`
 
 ## Running
 
