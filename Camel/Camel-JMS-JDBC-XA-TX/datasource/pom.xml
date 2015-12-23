@@ -23,14 +23,14 @@
   <parent>
     <groupId>org.apache.camel.demo</groupId>
     <artifactId>camel-jms-jdbc-xa</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
   </parent>
 
   <groupId>org.apache.camel.demo.camel-jms-jdbc-xa</groupId>
   <artifactId>datasource</artifactId>
   <packaging>bundle</packaging>
   <name>Camel :: Demo :: Camel-JMS-JDBC-XA-TX :: DataSource</name>
-  <version>2.0.0</version>
+  <version>2.1.0</version>
 
   <dependencies>
     <dependency>

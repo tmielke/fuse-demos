@@ -11,7 +11,7 @@
         <bundle>mvn:org.apache.geronimo.specs/geronimo-j2ee-connector_1.5_spec/2.0.0</bundle>
         
         <!-- JDBC driver classes -->
-	<bundle>wrap:mvn:mysql/mysql-connector-java/5.1.26</bundle>
+	<bundle>wrap:mvn:mysql/mysql-connector-java/5.1.27</bundle>
 
         <!--  additional Camel features -->
         <feature>camel-sql</feature>
@@ -24,7 +24,7 @@
     </feature>
     
     <!-- 
-      features:addurl mvn:org.apache.camel.demo.camel-jms-jdbc-xa/features/2.0.0/xml/features
+      features:addurl mvn:org.apache.camel.demo.camel-jms-jdbc-xa/features/2.1.0/xml/features
       features:install camel-jms-jdbc-xa-demo
      -->
 </features>
