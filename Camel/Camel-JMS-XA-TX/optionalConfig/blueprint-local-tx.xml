@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+    This configuration only uses Local JMS Transactions, not XA.
+    For using XA Transactions you need to set transacted=false in the 
+    bean configuration of "jmsJtaConfig" and in addition you should wrap
+    the ActiveMQXAConnectionFactory in a XaPooledConnectionFactory.
+    If you enable debug logging for org.apache.activemq.transaction and 
+    org.springframwwork.transaction you will get 
+    logging similar to this at runtime when handling JMS msgs:
+   
+    Creating new transaction with name [null]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+    Initiating transaction rollback
+
+    whereas with XA transactions configured properly you will get 
+
+    Started XA transaction: XID:[globalId=ffffffa730000...,branchId=100000000000...]
+    XA Transaction new/begin : XID:[globalId=ffffffa7300..,branchId=10000000696...] 
+
+    See blueprint-xa-tx.xml for a correct XA transaction configuration.
+-->
+
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+	xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
+	xsi:schemaLocation="
+       http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+	<!-- do not use dashes in persistent-id -->
+	<cm:property-placeholder persistent-id="eon.eet.interfaces.fenix_neon_rt_update" />
+
+	<!-- Configuration -->
+	
+	<!-- ActiveMQ config -->
+	<bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="tcp://localhost:61616" />
+	</bean>
+	<bean id="pooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory">
+		<property name="maxConnections" value="4" />
+		<property name="maximumActive" value="4" />
+		<property name="connectionFactory" ref="jmsConnectionFactory" />
+	</bean>
+	<bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+		<property name="connectionFactory" ref="pooledConnectionFactory" />
+		<property name="transacted" value="true" />
+		<property name="transactionManager" ref="jmsTransactionManager" />
+		<property name="deliveryPersistent" value="true" />
+	</bean>
+	<bean id="activemqtx" class="org.apache.activemq.camel.component.ActiveMQComponent">
+		<property name="configuration" ref="jmsConfig" />		
+	</bean>
+
+	<!-- JTA/XA ActiveMQ configuration -->
+
+	<bean id="jtaJmsRedeliveryPolicy" class="org.apache.activemq.RedeliveryPolicy">
+		<property name="initialRedeliveryDelay" value="3000" />
+		<property name="redeliveryDelay" value="3000" />
+		<property name="maximumRedeliveries" value="2" />
+	</bean>
+
+	<bean id="jtaJmsConnectionFactory" class="org.apache.activemq.ActiveMQXAConnectionFactory">
+		<property name="brokerURL" value="tcp://localhost:61616" />
+ 		<property name="redeliveryPolicy" ref="jtaJmsRedeliveryPolicy" />
+	</bean>
+
+	<bean id="jmsJtaConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+		<property name="connectionFactory" ref="jtaJmsConnectionFactory" />
+		<property name="transacted" value="true" />
+		<property name="transactionManager" ref="jtaTransactionManager" />
+		<property name="deliveryPersistent" value="true" />
+	</bean>
+	
+	<bean id="activemqjta" class="org.apache.activemq.camel.component.ActiveMQComponent">
+ 		<property name="configuration" ref="jmsJtaConfig" />
+	</bean>
+
+
+	<!-- JMS Local Transaction Management -->
+	<bean id="jmsTransactionManager"
+		class="org.springframework.jms.connection.JmsTransactionManager">
+		<property name="connectionFactory" ref="pooledConnectionFactory" />
+	</bean>
+		
+	<bean id="required" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
+		<property name="transactionManager" ref="jmsTransactionManager" />
+		<property name="propagationBehaviorName" value="PROPAGATION_REQUIRED" />
+	</bean>
+
+	<!-- JTA/XA Global Transaction Mangaement -->
+	<reference id="jtaFuseEsbTransactionManager" interface="javax.transaction.TransactionManager"
+		availability="mandatory" />
+
+	<reference id="jtaFuseEsbUserTransaction" interface="javax.transaction.UserTransaction"
+		availability="mandatory" />
+
+	<bean id="jtaTransactionManager"
+		class="org.springframework.transaction.jta.JtaTransactionManager">
+		<property name="transactionManager" ref="jtaFuseEsbTransactionManager" />
+		<property name="userTransaction" ref="jtaFuseEsbUserTransaction" />
+	</bean>
+
+	<bean id="requiredJta" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
+		<property name="transactionManager" ref="jtaTransactionManager" />
+		<property name="propagationBehaviorName" value="PROPAGATION_REQUIRED" />
+	</bean>
+
+
+	<!--  Camel Processor  -->
+	<bean class="org.apache.camel.demo.TestProcessor" id="testProcessor" >
+	  <property name="statsAfterMsgs" value="10000" />
+	  <property name="simulateProcessingError" value="true" />
+	  <property name="errorAfterMsgs" value="1" />
+	</bean>
+		
+	<camelContext xmlns="http://camel.apache.org/schema/blueprint">
+	    <route id="test">
+	    	<from uri="activemqjta:queue:testtt" />
+			<transacted ref="requiredJta"/> 
+			<log message="GOT MESSAGE#################################"/>
+			<log message="GOT MESSAGE#################################"/>
+			<log message="REDELIVERED: ${header.JMSRedelivered}" />
+			<process ref="testProcessor" />
+	    </route>
+	</camelContext>
+
+</blueprint>
