@@ -3,8 +3,7 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
 xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
-xsi:schemaLocation="
-http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
     <!-- ***************************************************************** -->
     <!-- JTA/XA Global Transaction Management -->
@@ -57,7 +56,7 @@ http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v
 
 
     <!-- ***************************************************************** -->
-    <!-- Target ActiveMQ Configuration -->	
+    <!-- Target ActiveMQ Configuration -->
     <bean id="AmqXaCF-2" class="org.apache.activemq.ActiveMQXAConnectionFactory">
         <property name="brokerURL" value="tcp://localhost:61618" />
         <property name="userName" value="admin" />
@@ -89,7 +88,9 @@ http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v
 
 
     <!-- ***************************************************************** -->
-    <!-- custom Camel Processor  -->
+    <!-- Custom Camel Processor to be called in route
+         Can be used to simulate tx rollback
+    -->
     <bean class="org.apache.camel.demo.TestProcessor" id="testProcessor" >
       <property name="statsAfterMsgs" value="100" />
       <property name="simulateProcessingError" value="false" />

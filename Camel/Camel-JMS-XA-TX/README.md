@@ -49,19 +49,13 @@ The only interesting files are:
   `activemq:producer --brokerUrl tcp://localhost:61616 --user admin --password admin --destination jms-xa-demo.in --persistent true --messageCount 1`
 
 - Watch the log. The msg will get routed within Camel using XA transactions.
-  The use of XA can be seen by observing the transaction Ids in the ServiceMix 
-  log file. These Ids typically have long numbers compared to local JMS trans-
-  actions that would not have such numbers.
-  An example logging output is shown below.
-
-- Watch the SMX log. The msg will get routed within Camel using XA transactions.
-  The use of XA can be seen by observing the transaction Ids in the ServiceMix 
+  The use of XA can be seen by observing the transaction Ids in the JBoss Fuse 
   log file. These Ids typically have long numbers compared to local JMS trans-
   actions that would not have such numbers.
   An example logging output is shown below.
 
 
-## NOTE: 
+## Note:
 For more verbose logging about the use of XA transactions, this logging 
 configuration can be applied on the Karaf shell:
 
