@@ -41,7 +41,8 @@ The only interesting files are:
 
 - Start a second broker using the provided ./activemq.xml broker configuration:
   This requires a standalone ActiveMQ installation. From its bin/ folder run
-    `./activemq console xbean:file:/<full-path-to-this-demo>/optionalConfig/activemq.xml`
+
+    `bin/activemq console xbean:file:/<full-path-to-this-demo>/optionalConfig/activemq.xml`
   This configuration will make the second broker listen on `tcp://localhost:61618`.
 
 

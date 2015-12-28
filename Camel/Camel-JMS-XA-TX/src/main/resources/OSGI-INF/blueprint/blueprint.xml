@@ -2,14 +2,23 @@
 
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
-xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
+xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
 xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <cm:property-placeholder id="config" persistent-id="org.apache.camel.demo.camel_jms_xa_tx_demo" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="simulateProcessingError" value="false" />
+            <cm:property name="errorAfterMsgs" value="2" />
+            <cm:property name="sourceBrokerUrl" value="failover:(tcp://localhost:61616)" />
+            <cm:property name="targetBrokerUrl" value="failover:(tcp://localhost:61618)" />
+        </cm:default-properties>
+    </cm:property-placeholder>
 
     <!-- ***************************************************************** -->
     <!-- JTA/XA Global Transaction Management -->
     <reference id="ariesTxManager" interface="javax.transaction.TransactionManager" availability="mandatory" />
-    <reference id="platformTxManager" interface="org.springframework.transaction.PlatformTransactionManager" 
-        availability="mandatory"/>
+    <reference id="platformTxManager" interface="org.springframework.transaction.PlatformTransactionManager" availability="mandatory"/>
+    <reference id="recoverableTxManager" interface="org.apache.geronimo.transaction.manager.RecoverableTransactionManager" availability="mandatory" />
 
     <bean id="requiredJta" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
         <property name="transactionManager" ref="platformTxManager" />
@@ -26,7 +35,7 @@ xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.o
     </bean>
     
     <bean id="AmqXaCF" class="org.apache.activemq.ActiveMQXAConnectionFactory">
-        <property name="brokerURL" value="tcp://localhost:61616" />
+        <property name="brokerURL" value="${sourceBrokerUrl}" />
         <property name="userName" value="admin" />
         <property name="password" value="admin" />
         <property name="redeliveryPolicy" ref="redeliveryPolicy" />
@@ -50,6 +59,16 @@ xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.o
         <property name="cacheLevelName" value="CACHE_NONE" />
     </bean>
 
+    <bean id="rm-source-amq" class="org.apache.activemq.pool.ActiveMQResourceManager" init-method="recoverResource">
+        <property name="transactionManager" ref="recoverableTxManager" />
+        <!-- CF must be of type ActiveMQConnectionFactory, otherwise no recovery will occur -->
+        <property name="connectionFactory" ref="AmqXaCF" />
+        <property name="userName" value="admin" />
+        <property name="password" value="admin" />
+        <!-- name needs to match name property set on JcaPooledConnectionFactory above -->
+        <property name="resourceName" value="activemq.source" /> 
+    </bean>
+
     <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
         <property name="configuration" ref="XAJmsConfig" />
     </bean>
@@ -58,7 +77,7 @@ xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.o
     <!-- ***************************************************************** -->
     <!-- Target ActiveMQ Configuration -->
     <bean id="AmqXaCF-2" class="org.apache.activemq.ActiveMQXAConnectionFactory">
-        <property name="brokerURL" value="tcp://localhost:61618" />
+        <property name="brokerURL" value="${targetBrokerUrl}" />
         <property name="userName" value="admin" />
         <property name="password" value="admin" />
     <property name="redeliveryPolicy" ref="redeliveryPolicy" />
@@ -82,6 +101,16 @@ xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.o
         <property name="cacheLevelName" value="CACHE_NONE" />
     </bean>
 
+    <bean id="rm-target-amq" class="org.apache.activemq.pool.ActiveMQResourceManager" init-method="recoverResource">
+        <property name="transactionManager" ref="recoverableTxManager" />
+        <!-- CF must be of type ActiveMQConnectionFactory, otherwise no recovery will occur -->
+        <property name="connectionFactory" ref="AmqXaCF-2" />
+        <property name="userName" value="admin" />
+        <property name="password" value="admin" />
+        <!-- name needs to match name property set on JcaPooledConnectionFactory above -->
+        <property name="resourceName" value="activemq.target" /> 
+    </bean>
+
     <bean id="activemq-2" class="org.apache.activemq.camel.component.ActiveMQComponent">
         <property name="configuration" ref="XAJmsConfig-2" />
     </bean>
@@ -92,10 +121,10 @@ xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.o
          Can be used to simulate tx rollback
     -->
     <bean class="org.apache.camel.demo.TestProcessor" id="testProcessor" >
-      <property name="statsAfterMsgs" value="100" />
-      <property name="simulateProcessingError" value="false" />
-      <property name="errorAfterMsgs" value="2" />
+      <property name="simulateProcessingError" value="${simulateProcessingError}" />
+      <property name="errorAfterMsgs" value="${errorAfterMsgs}" />
     </bean>
+
 
 
     <!-- ***************************************************************** -->

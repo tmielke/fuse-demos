@@ -4,10 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.activemq.command.ActiveMQTextMessage;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.camel.component.jms.JmsMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +37,6 @@ public class TestProcessor implements Processor {
     private int errorAfterMsgs = 5;
 
     private Logger log = LoggerFactory.getLogger(TestProcessor.class);
-    private static Map<String, String> connections = new HashMap<String, String>();
 
 
     public void process(Exchange exchange) throws Exception {
@@ -76,7 +73,7 @@ public class TestProcessor implements Processor {
             }
         }
         // do something with the payload and/or exchange here
-        String payload = exchange.getIn().getBody(String.class);
+        // String payload = exchange.getIn().getBody(String.class);
 
         exchange.getIn().setBody("Changed body");
         log.trace("Body of in message changed.");
