@@ -12,6 +12,9 @@ quick demo that show how to proxy HTTP requests.
 routes messages from an external HornetQ broker to an embedded ActiveMQ broker 
 (non transactional)
 
+### Camel-JMS-LocalTX
+consumes messages from one JMS broker and optionally routes to another JMS broker
+using local JMS transactions only. 
 
 ### Camel-JMS-JDBC 
 shows how to route messages in Camel from a JMS broker into a JDBC database.
