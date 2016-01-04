@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.2.0"
+xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <cm:property-placeholder id="config" persistent-id="org.apache.camel.demo.camel_jms_localtx_demo" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="simulateProcessingError" value="false" />
+            <cm:property name="errorAfterMsgs" value="2" />
+            <cm:property name="sourceBrokerUrl" value="tcp://localhost:61616" />
+            <cm:property name="targetBrokerUrl" value="tcp://localhost:61618" />
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+
+    <!-- ***************************************************************** -->
+    <!-- Source ActiveMQ configuration -->
+    <bean id="AmqCF" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="${sourceBrokerUrl}" />
+        <property name="userName" value="admin" />
+        <property name="password" value="admin" />
+    </bean>
+
+    <bean id="PooledCF" class="org.apache.activemq.pool.PooledConnectionFactory" init-method="start" destroy-method="stop">
+        <property name="maxConnections" value="1" />
+        <property name="connectionFactory" ref="AmqCF" />
+    </bean>
+
+    <bean id="JmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+        <property name="connectionFactory" ref="PooledCF" />
+        <property name="transacted" value="true" />
+        <property name="lazyCreateTransactionManager" value="false" />
+        <property name="maxConcurrentConsumers" value="1" />
+        <property name="cacheLevelName" value="CACHE_CONSUMER" />
+    </bean>
+
+    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+        <property name="configuration" ref="JmsConfig" />
+    </bean>
+
+
+    <!-- ***************************************************************** -->
+    <!-- Target ActiveMQ Configuration
+    <bean id="AmqCF-2" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="${targetBrokerUrl}" />
+        <property name="userName" value="admin" />
+        <property name="password" value="admin" />
+    </bean>
+
+    <bean id="PooledCF-2" class="org.apache.activemq.pool.PooledConnectionFactory" init-method="start" destroy-method="stop">
+        <property name="maxConnections" value="1" />
+        <property name="connectionFactory" ref="AmqCF-2" />
+    </bean>
+
+    <bean id="JmsConfig-2" class="org.apache.camel.component.jms.JmsConfiguration">
+        <property name="connectionFactory" ref="PooledCF-2" />
+        <property name="transacted" value="true" />
+        <property name="lazyCreateTransactionManager" value="false" />
+        <property name="maxConcurrentConsumers" value="1" />
+        <property name="cacheLevelName" value="CACHE_CONSUMER" />
+    </bean>
+
+    <bean id="activemq-2" class="org.apache.activemq.camel.component.ActiveMQComponent">
+        <property name="configuration" ref="JmsConfig-2" />
+    </bean>
+    -->
+
+    <!-- ***************************************************************** -->
+    <!-- Custom Camel Processor to be called in route
+         Can be used to simulate tx rollback
+    -->
+    <bean class="org.apache.camel.demo.TestProcessor" id="testProcessor" >
+      <property name="simulateProcessingError" value="${simulateProcessingError}" />
+      <property name="errorAfterMsgs" value="${errorAfterMsgs}" />
+    </bean>
+
+
+    <!-- ***************************************************************** -->
+    <!-- Camel Route Definition -->
+    <camelContext xmlns="http://camel.apache.org/schema/blueprint" id="camel-jms-localtx-demo" trace="true">
+        <route id="jms-jms-localtx" trace="false">
+            <from uri="activemq:queue:jms-localtx-demo.in" />
+            <log message="Received msg with JMSRedelivered:${header.JMSRedelivered}" />
+            <process ref="testProcessor" />
+            <!--to uri="activemq-2:queue:jms-localtx-demo.out" /-->
+        </route>
+    </camelContext>
+</blueprint>
