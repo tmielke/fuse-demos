@@ -15,9 +15,9 @@
 
 
     <!-- ******************** Camel route definition  ********************* -->
-    <camelContext xmlns="http://camel.apache.org/schema/blueprint">
+    <camelContext xmlns="http://camel.apache.org/schema/blueprint" trace="true">
         <!-- Sample route using the camel-sql component -->
-        <route id="jms-sql-jms-xa">
+        <route id="jms-sql-jms-xa" trace="false">
            <from uri="amqxa:SQL_IN" />
             <!-- transacted ref="requiredJta" / --> 
             <log message="REDELIVERED: ${header.JMSRedelivered}" />
@@ -32,7 +32,7 @@
         </route>
 
         <!--  Sample route using camel-jdbc component -->
-        <route id="jms-jdbc-jms-xa">
+        <route id="jms-jdbc-jms-xa" trace="false">
            <from uri="amqxa:JDBC_IN" />
             <!-- transacted ref="requiredJta" /-->
             <log message="REDELIVERED: ${header.JMSRedelivered}" />
@@ -102,8 +102,8 @@
         <property name="transactionManager" ref="recoverableTxManager" />
         <!-- CF must be of type ActiveMQConnectionFactory, otherwise no recovery will occur -->
         <property name="connectionFactory" ref="AmqXaCF" />
-	<property name="userName" value="admin" />
-	<property name="password" value="admin" />
+        <property name="userName" value="admin" />
+        <property name="password" value="admin" />
 
         <!-- name needs to match name property set on JcaPooledConnectionFactory above -->
         <property name="resourceName" value="activemq.default" /> 
