@@ -11,6 +11,8 @@ xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.o
             <cm:property name="errorAfterMsgs" value="2" />
             <cm:property name="sourceBrokerUrl" value="tcp://localhost:61616" />
             <cm:property name="targetBrokerUrl" value="tcp://localhost:61618" />
+            <cm:property name="username" value="admin" />
+            <cm:property name="password" value="admin" />
         </cm:default-properties>
     </cm:property-placeholder>
 
@@ -19,8 +21,8 @@ xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.o
     <!-- Source ActiveMQ configuration -->
     <bean id="AmqCF" class="org.apache.activemq.ActiveMQConnectionFactory">
         <property name="brokerURL" value="${sourceBrokerUrl}" />
-        <property name="userName" value="admin" />
-        <property name="password" value="admin" />
+        <property name="userName" value="${username}" />
+        <property name="password" value="${password}" />
     </bean>
 
     <bean id="PooledCF" class="org.apache.activemq.pool.PooledConnectionFactory" init-method="start" destroy-method="stop">
@@ -45,8 +47,8 @@ xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.o
     <!-- Target ActiveMQ Configuration
     <bean id="AmqCF-2" class="org.apache.activemq.ActiveMQConnectionFactory">
         <property name="brokerURL" value="${targetBrokerUrl}" />
-        <property name="userName" value="admin" />
-        <property name="password" value="admin" />
+        <property name="userName" value="${username}" />
+        <property name="password" value="${password}" />
     </bean>
 
     <bean id="PooledCF-2" class="org.apache.activemq.pool.PooledConnectionFactory" init-method="start" destroy-method="stop">
