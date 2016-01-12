@@ -8,11 +8,12 @@
 
 
     <!-- Imported OSGi services include the Transaction manager and JDBC DataSource -->
-    <reference id="mysql-db" interface="javax.sql.DataSource" availability="mandatory" filter="(datasource.name=MySQL)" />
+    <reference id="mysql-db" interface="javax.sql.DataSource" availability="mandatory" filter="(datasource.name=DerbyDS)" />
 
 
     <!-- ******************** Camel route definition  ********************* -->
-    <camelContext xmlns="http://camel.apache.org/schema/blueprint">
+    <camelContext xmlns="http://camel.apache.org/schema/blueprint" id="camel-jms-jdbc-demo">
+
         <!-- Sample route using the camel-sql component -->
         <route id="jms-sql-jms">
            <from uri="amq:SQL_IN" />
@@ -26,6 +27,7 @@
             <to uri="log:AfterJDBC?level=INFO&amp;showAll=true" />
             <to uri="amq:queue:SQL_OUT" />
         </route>
+
 
         <!--  Sample route using camel-jdbc component -->
         <route id="jms-jdbc-jms">
@@ -42,16 +44,29 @@
             <to uri="log:AfterJDBC?level=INFO&amp;showAll=true" />
             <to uri="amq:queue:JDBC_OUT" />
         </route>
+
+
+        <!--  A bit of cheating. A route that triggers only once to create the 
+              DB table in embedded Derby -->
+        <route id="create-db-tables" autoStartup="false">
+           <from uri="timer:CreateDB?delay=2000&amp;repeatCount=1" />
+            <log message="Creating DB Table using" />
+            <setBody>
+                <constant><![CDATA[CREATE TABLE Users (firstname VARCHAR(50) NOT NULL, lastname VARCHAR(50), login VARCHAR(12), password VARCHAR(20), PRIMARY KEY (login))]]></constant>
+            </setBody>
+            <log message="${body}" />
+            <to uri="jdbc:mysql-db?resetAutoCommit=false" />
+        </route>
     </camelContext>
 
 
     <!-- custom Camel Processor bean -->
     <bean class="org.apache.camel.demo.camel_jms_jdbc.TestProcessor" id="testProcessor" >
       <property name="simulateProcessingError" value="false" />
-      <property name="errorAfterMsgs" value="3" />
+      <property name="errorAfterMsgs" value="2" />
     </bean>
 
-
+    <!-- ********************* SQL configuration ************************** -->
     <bean id="sql" class="org.apache.camel.component.sql.SqlComponent">
         <property name="dataSource" ref="mysql-db"/>
     </bean>
@@ -75,7 +90,7 @@
     </bean>
 
     <bean id="AmqCF" class="org.apache.activemq.ActiveMQConnectionFactory">
-        <property name="brokerURL" value="failover:(tcp://localhost:61616)?jms.prefetchPolicy.all=1" />
+        <property name="brokerURL" value="failover:(tcp://localhost:61616)" />
         <property name="userName" value="admin" />
         <property name="password" value="admin" />
     </bean>

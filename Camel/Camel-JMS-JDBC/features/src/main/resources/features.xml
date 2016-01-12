@@ -4,7 +4,8 @@
     <feature version="${project.version}" name="camel-jms-jdbc-demo">
 
         <!-- JDBC driver classes -->
-        <bundle>wrap:mvn:mysql/mysql-connector-java/5.1.17</bundle>
+        <!-- bundle>wrap:mvn:mysql/mysql-connector-java/5.1.17</bundle-->
+        <bundle>mvn:org.apache.derby/derby/10.10.1.1</bundle>
         <bundle>wrap:mvn:commons-dbcp/commons-dbcp/1.4</bundle>
 
         <!--  Additional Camel features -->

@@ -23,23 +23,20 @@
   <parent>
     <groupId>org.apache.camel.demo</groupId>
     <artifactId>camel-jms-jdbc</artifactId>
-    <version>1.0.0</version>
+    <version>2.0.0</version>
   </parent>
 
   <groupId>org.apache.camel.demo.camel-jms-jdbc</groupId>
   <artifactId>datasource</artifactId>
   <packaging>bundle</packaging>
   <name>Camel :: Demo :: Camel-JMS-JDBC:: DataSource</name>
-  <version>1.0.0</version>
- 
+
   <dependencies>
-<!--
     <dependency>
-      <groupId>org.apache.geronimo.components</groupId>
-      <artifactId>geronimo-connector</artifactId>
-      <version>2.2.2</version>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <version>10.10.1.1</version>
     </dependency>
--->
   </dependencies>
 
   <build>

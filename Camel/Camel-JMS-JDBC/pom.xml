@@ -4,16 +4,16 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.apache.camel.demo</groupId>
     <artifactId>camel-jms-jdbc</artifactId>
-    <version>1.0.0</version>
+    <version>2.0.0</version>
     <name>Camel :: Demo :: Camel-JMS-JDBC</name>
     <packaging>pom</packaging>
 
     <properties>
-        <camel.version>2.10.0.fuse-71-047</camel.version>
-        <amq.version>5.8.0.redhat-60015</amq.version>
+        <camel.version>2.15.1.redhat-621084</camel.version>
+        <amq.version>5.11.0.redhat-621084</amq.version>
         <tomcat-jdbc.version>7.0.37</tomcat-jdbc.version>
         <juli.version>6.0.36</juli.version>
-        <mysql.version>5.1.17</mysql.version>
+        <mysql.version>5.1.26</mysql.version>
     </properties>
 
     <modules>
