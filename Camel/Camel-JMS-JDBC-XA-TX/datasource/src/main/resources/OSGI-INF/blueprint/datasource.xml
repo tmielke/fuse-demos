@@ -16,10 +16,6 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
     xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0">
 
-  <reference id="platformTxManager" interface="org.springframework.transaction.PlatformTransactionManager" availability="mandatory"/>
-  <reference id="transactionManager" interface="javax.transaction.TransactionManager" />
-  <reference id="recoverableTxManager" interface="org.apache.geronimo.transaction.manager.RecoverableTransactionManager" availability="mandatory" />
-
   <!-- NOTE: If you are running JBoss Fuse 6.0, please switch to the demo Camel-JMS-JDBC-XA-TX-JBossFuse6.0.
        This version of the demo will not work due to bug http://fusesource.com/issues/browse/ENTESB-633.
        The demo Camel-JMS-JDBC-XA-TX-JBossFuse6.0 presents a workaround solution for ENTESB-633
