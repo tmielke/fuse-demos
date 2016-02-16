@@ -22,7 +22,6 @@ permissions and limitations under the License.
         http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
     <reference id="platformTxManager" interface="org.springframework.transaction.PlatformTransactionManager" availability="mandatory"/>
-    <reference id="transactionManager" interface="javax.transaction.TransactionManager" />
     <reference id="recoverableTxManager" interface="org.apache.geronimo.transaction.manager.RecoverableTransactionManager" availability="mandatory" />
 
     <bean id="requiredJta" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
@@ -80,7 +79,7 @@ permissions and limitations under the License.
         <property name="name" value="activemq.default" />
         <property name="maxConnections" value="5" />
         <property name="connectionFactory" ref="AmqXaCF" />
-        <property name="transactionManager" ref="transactionManager" />
+        <property name="transactionManager" ref="recoverableTxManager" />
     </bean>
 
     <bean id="AmqXaCF" class="org.apache.activemq.ActiveMQXAConnectionFactory">
@@ -119,7 +118,7 @@ permissions and limitations under the License.
     <!-- For ActiveMQ 5.9.0 (JBoss Fuse 6.1) and higher -->
     <bean id="FuseWmqXaConnectionFactory" class="org.apache.activemq.jms.pool.JcaPooledConnectionFactory">
         <property name="connectionFactory" ref="WMQ-CF-Wrapper"/>
-        <property name="transactionManager" ref="transactionManager"/>
+        <property name="transactionManager" ref="recoverableTxManager"/>
         <property name="maxConnections" value="1"/>
         <!-- note we set a unique name for the XA resource" -->
         <property name="name" value="ibm-wmq" />

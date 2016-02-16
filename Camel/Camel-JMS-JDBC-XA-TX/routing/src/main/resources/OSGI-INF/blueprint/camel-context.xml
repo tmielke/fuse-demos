@@ -9,7 +9,6 @@
 
     <!-- Imported OSGi services include the Transaction manager and JDBC DataSource -->
     <reference id="platformTxManager" interface="org.springframework.transaction.PlatformTransactionManager" availability="mandatory"/>
-    <reference id="transactionManager" interface="javax.transaction.TransactionManager" />
     <reference id="recoverableTxManager" interface="org.apache.geronimo.transaction.manager.RecoverableTransactionManager" availability="mandatory" />
     <reference id="mysql-db" interface="javax.sql.DataSource" availability="mandatory" filter="(datasource.name=MySQL)" />
 
@@ -84,7 +83,7 @@
         <property name="name" value="activemq.default" />
         <property name="maxConnections" value="1" />
         <property name="connectionFactory" ref="AmqXaCF" />
-        <property name="transactionManager" ref="transactionManager" />
+        <property name="transactionManager" ref="recoverableTxManager" />
     </bean>
 
     <bean id="AmqXaCF" class="org.apache.activemq.ActiveMQXAConnectionFactory">
