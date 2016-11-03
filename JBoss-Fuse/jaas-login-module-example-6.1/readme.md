@@ -31,7 +31,7 @@ In essence the configuration is as follows (some details omitted for clarity).
 See src/main/resources/OSGI-INF/blueprint/jaas.xml.
 
 As per the docs at
-https://access.redhat.com/site/documentation/en-US/Red_Hat_JBoss_Fuse/6.1/html/Security_Guide/files/ESBSecureJAASRealmDef.html
+https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Fuse/6.1/html/Security_Guide/ESBSecureContainer.html#ESBSecureJAASRealmDef
 a jaas configuration with a higher rank takes precedence over a jaas config with a lower rank.
 The default ZookeeperLoginModule uses rank 1, the ZookeeperLoginModule defined in this example uses rank 4 and will
 therefore be used instead when authenticating users.
