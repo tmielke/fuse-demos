@@ -46,6 +46,18 @@
             <to uri="log:AfterJDBC?level=INFO&amp;showAll=true" />
             <to uri="amqxa:queue:JDBC_OUT" />
         </route>
+
+	 <!--  A bit of cheating. A route that triggers only once to create the DB table -->
+        <route id="create-db-tables" autoStartup="false">
+           <from uri="timer:CreateDB?delay=2000&amp;repeatCount=1" />
+            <log message="Creating DB Table using" />
+            <setBody>
+                 <constant><![CDATA[CREATE TABLE Users (firstname VARCHAR(50) NOT NULL, lastname VARCHAR(50), login VARCHAR(12), password VARCHAR(20), PRIMARY KEY (login))]]></constant>
+                <!--constant><![CDATA[DELETE FROM Users]]></constant-->
+            </setBody>
+            <log message="${body}" />
+            <to uri="jdbc:oracle-db?resetAutoCommit=false" />
+        </route>
     </camelContext>
 
 

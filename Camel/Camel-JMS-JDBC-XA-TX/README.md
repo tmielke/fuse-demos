@@ -93,30 +93,48 @@ from the top level demo directory.
 ## RUNNING
 Check that all bundles got deployed and started successfully. 
 
-### Using jconsole to send JMS messages
-Open `jconsole` and connect to the running JBoss Fuse instance. If the instance is running locally, connect to
-the process called `org.apache.karaf.main.Main`.
+
 
 #### Testing the route using camel-sql component:
-On the MBeans tab, navigate to `org.apache.activemq` &rarr; `fusemq` &rarr; `Queue` &rarr; `SQL_IN`.  
-Using the `sendTextMessage(String body, String user, String password)` operation send a message.
-For the first argument use the string `Sam, Smith, ssmith, secret`.  For the second and third password, 
-use the username admin and password admin.
-Observe ServiceMix log file and verify that the message got routed to JMS destination SQL_OUT.
-If you click the browse() operation for the queue SQL_OUT, the message text should say
-"Data correctly written to database".
-Check the JDBC database and verify that this record got written into the Users table.
+
+From the Karaf shell send a JMS message to the SQL_IN JMS queue via this Karaf command:
+`activemq:producer --user admin --password admin --destination queue://SQL_IN --persistent true --messageCount 1 --message "Sam, Smith, ssmith, secret"`
+
+Observe the log file and verify that the message got routed to JMS destination SQL_OUT.
+Run Karaf command `activemq:dstat` to verify the JMS destination SQL_OUT got created.
+If you browse the JMS destination SQL_OUT using the Karaf command
+`activemq:browse --amqurl tcp://localhost:61616 --user admin --password admin  SQL_OUT`
+then the message written to this destination should have this text: 
+`Data correctly written to database`
+
 
 #### Testing the route using camel-jdbc component:
-On the MBeans tab, navigate to `org.apache.activemq` &rarr; `fusemq` &rarr; `Queue` &rarr; `JDBC_IN`.
-Using the `sendTextMessage(String body, String user, String password)` operation send a message.
-For the first argument use the string `INSERT INTO Users VALUES('Jon', 'Jackson', 'jjackson', 'secret')`.  
-For the second and third password, use the username admin and password admin.
-Observe ServiceMix log file and verify that all messages got routed to 
-JMS destination JDBC_OUT. 
-If you click the browse() operation for the queue SQL_OUT, the message text should say
-"Data correctly written to database".
-Check the JDBC database and verify that this record got written into the Users table.
+From the Karaf shell send a JMS message to the JDBC_IN JMS queue via this Karaf command:
+`activemq:producer --user admin --password admin --destination queue://JDBC_IN --persistent true --messageCount 1 --message "INSERT INTO Users VALUES('Jon', 'Jackson', 'jjackson', 'secret')"`
+
+Observe the log file and verify that all messages got routed to the JMS 
+destination JDBC_OUT.
+Run Karaf command `activemq:dstat` to verify the JMS destination JDBC_OUT got created.
+If you browse the JMS destination JDBC_OUT using the Karaf command
+`activemq:browse --amqurl tcp://localhost:61616 --user admin --password admin  JDBC_OUT`
+then the message written to this destination should have this text: 
+`Data correctly written to database`
+
+
+#### Optional Testing Steps
+1) What happens if you send the above message again? 
+
+2) Stop the bundle `Camel :: Demo :: Camel-JMS-JDBC:: DataSource (2.0.0)`
+using `osgi:stop <bundleid>`.
+Send another message to one of the JMS destinations that the Camel routes listen on.
+What happens this time? Why is there no error raised?
+
+3) Run `camel:route-info jms-sql-jms`. What does the count for "Exchanges Inflight" say? Why?
+
+4) What happens if you restart the datasource bundle?
+
+5) What happens if you don't restart the database bundle within five minutes?
+
 
 
 
