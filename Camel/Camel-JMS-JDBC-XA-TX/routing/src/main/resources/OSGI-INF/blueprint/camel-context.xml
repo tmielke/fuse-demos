@@ -56,7 +56,7 @@
                 <!--constant><![CDATA[DELETE FROM Users]]></constant-->
             </setBody>
             <log message="${body}" />
-            <to uri="jdbc:oracle-db?resetAutoCommit=false" />
+            <to uri="jdbc:mysql-db?resetAutoCommit=false" />
         </route>
     </camelContext>
 
