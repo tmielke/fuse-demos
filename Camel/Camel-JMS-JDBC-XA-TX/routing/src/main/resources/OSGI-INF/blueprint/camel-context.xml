@@ -10,6 +10,11 @@
     <!-- Imported OSGi services include the Transaction manager and JDBC DataSource -->
     <reference id="platformTxManager" interface="org.springframework.transaction.PlatformTransactionManager" availability="mandatory"/>
     <reference id="recoverableTxManager" interface="org.apache.geronimo.transaction.manager.RecoverableTransactionManager" availability="mandatory" />
+
+    <!-- Note, in a Fabric managed env you may need to use 
+         availability="optional" due to bug
+         https://issues.jboss.org/browse/ENTESB-6271.
+    -->
     <reference id="mysql-db" interface="javax.sql.DataSource" availability="mandatory" filter="(datasource.name=MySQL)" />
 
 
