@@ -1,6 +1,6 @@
 # Camel-JMS-JDBC-XA-Transactions demo
 
-Tested against JBoss Fuse 6.2.1.
+Tested against JBoss Fuse 6.2.1 and 6.3.
 
 A Camel based demo that shows how to correctly use XA transactions across 
 different transactional resources such as JMS and JDBC.
@@ -24,7 +24,6 @@ The two Camel routes simply read:
       <from uri="amqxa:SQL_IN" />
       <transacted ref="requiredJta" /> 
       <log message="REDELIVERED: ${header.JMSRedelivered}" />
-      <convertBodyTo type="java.lang.Object[]" />
       <to uri ="sql:INSERT INTO USERS values (#, #, #, #)" />
       <setBody>
         <constant>Data correctly written to database.</constant>
@@ -87,7 +86,7 @@ from the top level demo directory.
   the line 
   #admin=admin,admin
 - Start JBoss Fuse 6.0 or higher
-- `features:addurl mvn:org.apache.camel.demo.camel-jms-jdbc-xa/features/2.1.0/xml/features`
+- `features:addurl mvn:org.apache.camel.demo.camel-jms-jdbc-xa/features/2.2.0/xml/features`
 - `features:install camel-jms-jdbc-xa-demo`
 
 ## RUNNING

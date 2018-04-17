@@ -25,9 +25,12 @@
            <from uri="amqxa:SQL_IN" />
             <!-- transacted ref="requiredJta" / --> 
             <log message="REDELIVERED: ${header.JMSRedelivered}" />
-            <!--  Camel 2.10 does not support named parameters yet-->
-            <convertBodyTo type="java.lang.Object[]" />
-            <to uri ="sql:INSERT INTO USERS values (#, #, #, #)" />
+
+            <!--  Camel 2.10 does not support named parameters yet, so need
+                  explicit conversion
+            -->
+            <!--convertBodyTo type="java.lang.Object[]" /-->
+            <to uri ="sql:INSERT INTO Users values (#, #, #, #)" />
             <setBody>
                 <constant>Data correctly written to database.</constant>
             </setBody>
@@ -52,7 +55,7 @@
             <to uri="amqxa:queue:JDBC_OUT" />
         </route>
 
-	 <!--  A bit of cheating. A route that triggers only once to create the DB table -->
+        <!--  A bit of cheating. A route that triggers only once to create the DB table -->
         <route id="create-db-tables" autoStartup="false">
            <from uri="timer:CreateDB?delay=2000&amp;repeatCount=1" />
             <log message="Creating DB Table using" />

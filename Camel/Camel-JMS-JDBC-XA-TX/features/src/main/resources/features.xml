@@ -7,11 +7,12 @@
 	<!-- aries.transaction.jdbc should be installed out of the box in 6.1 but is not in release candidate.
              https://issues.jboss.org/browse/ENTESB-1029
         -->
-        <bundle>mvn:org.apache.aries.transaction/org.apache.aries.transaction.jdbc/1.0.1.redhat-610379</bundle>
+        <feature>connector</feature>
+        <bundle>mvn:org.apache.aries.transaction/org.apache.aries.transaction.jdbc/2.1.2</bundle>
         <bundle>mvn:org.apache.geronimo.specs/geronimo-j2ee-connector_1.5_spec/2.0.0</bundle>
         
         <!-- JDBC driver classes -->
-	<bundle>wrap:mvn:mysql/mysql-connector-java/5.1.27</bundle>
+        <bundle>wrap:mvn:mysql/mysql-connector-java/5.1.27</bundle>
 
         <!--  additional Camel features -->
         <feature>camel-sql</feature>
@@ -24,7 +25,7 @@
     </feature>
     
     <!-- 
-      features:addurl mvn:org.apache.camel.demo.camel-jms-jdbc-xa/features/2.1.0/xml/features
+      features:addurl mvn:org.apache.camel.demo.camel-jms-jdbc-xa/features/2.2.0/xml/features
       features:install camel-jms-jdbc-xa-demo
      -->
 </features>

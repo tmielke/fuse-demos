@@ -6,14 +6,13 @@
   <parent>
     <groupId>org.apache.camel.demo</groupId>
     <artifactId>camel-jms-jdbc-xa</artifactId>
-    <version>2.1.0</version>
+    <version>2.2.0</version>
   </parent>
 
   <groupId>org.apache.camel.demo.camel-jms-jdbc-xa</groupId>
   <artifactId>routing</artifactId>
   <packaging>bundle</packaging>
   <name>Camel :: Demo :: Camel-JMS-JDBC-XA-TX :: Routing</name>
-  <version>2.1.0</version>
 
     <properties>
         <tomcat-jdbc.version>7.0.37</tomcat-jdbc.version>
