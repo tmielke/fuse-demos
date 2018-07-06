@@ -23,9 +23,7 @@ I have not found a way yet to configure the equivalent of
 
 `zipkin.setSpanCollector(HttpSpanCollector.create("http://localhost:8080", new EmptySpanCollectorMetricsHandler()));`
 
-in application.properties. 
-Further above code has a dependency on `mvn:io.zipkin.brave:brave-spancollector-http:3.9.1`, which does not seem to work in Spring Boot. Perhaps some other version of this artifact works with Spring Boot, but I have not verified. 
-As a result traces from service1 currently do not get displayed properly in Hawkular.
+in application.properties. Because of this, Zipkin is configured programmatically in Service1Route.java.
 
 Note: camel-zipkin versions <2.20 do use the older scribe collector and send their traces in a binary format. 
 This is not understood by Hawkular (at least not out of the box), so one needs to use camel-zipkin 2.20 or higher in order to use the newer HTTP collector.
@@ -40,7 +38,7 @@ Client is configured in the `src/main/java/sample/camel/ClientApplication.java` 
 
 ### Build
 
-First, start Zipkin as described below in the [Installing Hawkular Server]("Installing Hawkular Server") section
+First, start Zipkin as described below in the "Installing Hawkular Server" section.
 
 Then compile this example:
 
@@ -85,7 +83,7 @@ You can then click on each span and get annotated data from the Camel exchange a
 ![Zipkin UI Span Details](images/zipkin-web-console-2.png "Detail of the span")
 
 
-### Installing Hawkular Server
+### Installing Hawkular Server 
 
 A fairly quick way to get up and running on Hawkular is pulling and running an appropriate docker container.
 
