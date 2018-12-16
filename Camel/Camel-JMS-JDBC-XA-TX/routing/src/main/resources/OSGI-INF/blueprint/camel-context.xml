@@ -93,7 +93,7 @@
     <bean id="amqxa" class="org.apache.camel.component.jms.JmsComponent">
         <property name="configuration">
             <bean class="org.apache.camel.component.jms.JmsConfiguration">
-                <property name="connectionFactory" ref="xaPooledCF" />
+                <property name="connectionFactory" ref="XAPooledCF" />
                 <property name="transacted" value="false" />
                 <property name="transactionManager" ref="platformTxManager" />
                 <property name="maxConcurrentConsumers" value="1" />
@@ -101,7 +101,7 @@
                 <property name="cacheLevelName" value="CACHE_CONNECTION" />
                 <property name="eagerLoadingOfProperties" value="false" />
             </bean>
-        </property>>
+        </property>
     </bean>
 
     <bean id="XAPooledCF" class="org.apache.activemq.pool.JcaPooledConnectionFactory" init-method="start" destroy-method="stop">
