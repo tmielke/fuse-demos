@@ -24,7 +24,11 @@
 
         <!-- Sample route using the camel-sql component -->
         <route id="jms-sql-jms-xa" trace="false">
-           <from uri="amqxa:SQL_IN" />
+            <!-- 
+                Set disableReplyTo=true on consumers to enforce InOnly exchange mode and avoid deadlocks 
+                (producer never ends the TX because they are waiting for a not expected reply). 
+            -->
+           <from uri="amqxa:SQL_IN?disableReplyTo=true" />
             <!-- transacted ref="requiredJta" / --> 
             <log message="REDELIVERED: ${header.JMSRedelivered}" />
 
@@ -87,15 +91,17 @@
  
     <!-- ********************* AMQ configuration ************************** -->
     <bean id="amqxa" class="org.apache.camel.component.jms.JmsComponent">
-        <property name="configuration" ref="AMQConfig" />
-    </bean>
-
-    <bean id="AMQConfig" class="org.apache.camel.component.jms.JmsConfiguration">
-        <property name="connectionFactory" ref="XAPooledCF" />
-        <property name="transacted" value="false" />
-        <property name="transactionManager" ref="platformTxManager" />
-        <property name="maxConcurrentConsumers" value="1" />
-        <property name="cacheLevelName" value="CACHE_CONNECTION" />
+        <property name="configuration">
+            <bean class="org.apache.camel.component.jms.JmsConfiguration">
+                <property name="connectionFactory" ref="xaPooledCF" />
+                <property name="transacted" value="false" />
+                <property name="transactionManager" ref="platformTxManager" />
+                <property name="maxConcurrentConsumers" value="1" />
+                <property name="deliveryPersistent" value="true" />
+                <property name="cacheLevelName" value="CACHE_CONNECTION" />
+                <property name="eagerLoadingOfProperties" value="false" />
+            </bean>
+        </property>>
     </bean>
 
     <bean id="XAPooledCF" class="org.apache.activemq.pool.JcaPooledConnectionFactory" init-method="start" destroy-method="stop">
@@ -105,15 +111,24 @@
         <property name="transactionManager" ref="recoverableTxManager" />
     </bean>
 
+    <!--
+        With CACHE_CONNECTION a consumer gets created and destroyed for every single 
+        message, set prefetchPolicy=1 to reduce the overhead improving performance.
+    -->
     <bean id="AmqXaCF" class="org.apache.activemq.ActiveMQXAConnectionFactory">
         <property name="brokerURL" value="failover:(tcp://localhost:61616)" />
         <property name="userName" value="admin" />
         <property name="password" value="admin" />
-	<!--property name="redeliveryPolicy" ref="policy" /-->
-    </bean>
-
-    <bean id="policy" class="org.apache.activemq.RedeliveryPolicy">
-      <property name="maximumRedeliveries" value="6" />
+        <property name="prefetchPolicy">
+            <bean class="org.apache.activemq.ActiveMQPrefetchPolicy">
+                <property name="all" value="1" />
+            </bean>
+        </property>
+        <property name="redeliveryPolicy">
+            <bean class="org.apache.activemq.RedeliveryPolicy">
+                <property name="maximumRedeliveries" value="6" />
+            </bean>
+        </property>
     </bean>
 
     <bean id="resourceManager-AMQ" class="org.apache.activemq.pool.ActiveMQResourceManager" init-method="recoverResource">
