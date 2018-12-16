@@ -20,17 +20,16 @@
 
     <!-- ******************** Camel route definition  ********************* -->
     <camelContext xmlns="http://camel.apache.org/schema/blueprint" trace="true">
+        <propertyPlaceholder id="properties" location="classpath:sql.properties"/>
+
         <!-- Sample route using the camel-sql component -->
         <route id="jms-sql-jms-xa" trace="false">
            <from uri="amqxa:SQL_IN" />
             <!-- transacted ref="requiredJta" / --> 
             <log message="REDELIVERED: ${header.JMSRedelivered}" />
 
-            <!--  Camel 2.10 does not support named parameters yet, so need
-                  explicit conversion
-            -->
-            <!--convertBodyTo type="java.lang.Object[]" /-->
-            <to uri ="sql:INSERT INTO Users values (#, #, #, #)" />
+            <!--to uri="sql:INSERT INTO users VALUES (#, #, #, #)" /-->
+            <to uri="sql:{{insert-user}}" />
             <setBody>
                 <constant>Data correctly written to database.</constant>
             </setBody>
