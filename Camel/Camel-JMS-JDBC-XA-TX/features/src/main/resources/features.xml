@@ -12,7 +12,7 @@
         <bundle>mvn:org.apache.geronimo.specs/geronimo-j2ee-connector_1.5_spec/2.0.0</bundle>
         
         <!-- JDBC driver classes -->
-        <bundle>wrap:mvn:mysql/mysql-connector-java/5.1.27</bundle>
+        <bundle>wrap:mvn:mysql/mysql-connector-java/${mysql.version}</bundle>
 
         <!--  additional Camel features -->
         <feature>camel-sql</feature>

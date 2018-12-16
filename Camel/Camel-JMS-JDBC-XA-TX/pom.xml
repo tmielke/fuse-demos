@@ -9,8 +9,8 @@
     <packaging>pom</packaging>
 
     <properties>
-        <camel.version>2.17.0.redhat-630187</camel.version>
-        <amq.version>5.11.0.redhat-630187</amq.version>
+        <camel.version>2.17.0.redhat-630371</camel.version>
+        <amq.version>5.11.0.redhat-630371</amq.version>
         <mysql.version>5.1.27</mysql.version>
     </properties>
 
@@ -26,7 +26,7 @@
         <plugin>
           <groupId>org.apache.felix</groupId>
           <artifactId>maven-bundle-plugin</artifactId>
-          <version>2.3.7</version>
+          <version>3.3.0</version>
           <extensions>true</extensions>
         </plugin>
         <plugin>

@@ -15,8 +15,6 @@
   <name>Camel :: Demo :: Camel-JMS-JDBC-XA-TX :: Routing</name>
 
     <properties>
-        <tomcat-jdbc.version>7.0.37</tomcat-jdbc.version>
-        <juli.version>6.0.36</juli.version>
         <servicemix.osgi.import>
             *
         </servicemix.osgi.import>
@@ -54,26 +52,6 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-sql</artifactId>
             <version>${camel.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- JDBC related dependencies -->
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-jdbc</artifactId>
-            <version>${tomcat-jdbc.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-juli</artifactId>
-            <version>${tomcat-jdbc.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>juli</artifactId>
-            <version>${juli.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

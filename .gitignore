@@ -18,3 +18,4 @@
 
 # Maven build folder
 target
+.vscode
