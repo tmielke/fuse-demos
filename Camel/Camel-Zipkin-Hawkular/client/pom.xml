@@ -29,7 +29,7 @@
 
   <artifactId>camel-example-zipkin-hawkular-client</artifactId>
   <name>Camel :: Example :: Zipkin :: Client</name>
-  <description>An example showing how to trace incoming and outgoing messages from Camel with Zipkin</description>
+  <description>An example showing how to trace incoming and outgoing messages from Camel with Zipkin to Hawkular</description>
 
   <!-- import Camel BOM -->
   <dependencyManagement>
