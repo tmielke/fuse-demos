@@ -7,7 +7,7 @@
   <packaging>bundle</packaging>
 
   <properties>
-    <camel-version>2.15.1.redhat-621084</camel-version>
+    <camel-version>2.24.2</camel-version>
     <activemq-version>5.11.0.redhat-621084</activemq-version>
     <junit-version>4.4</junit-version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
