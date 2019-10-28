@@ -29,7 +29,7 @@
   <name>A Camel Route using DeadLetterChannel error handler</name>
   
   <properties>
-    <camel.version>2.12.0</camel.version>
+    <camel.version>2.24.2</camel.version>
   </properties>
   
   <repositories>  	
