@@ -33,7 +33,7 @@
     </modules>
 
     <properties>
-        <camel.version>2.12.0.redhat-610379</camel.version>
+        <camel.version>2.24.0</camel.version>
         <fuse.version>redhat-610312</fuse.version>
         <maven-resources-plugin-version>2.5</maven-resources-plugin-version>
         <build-helper-plugin-version>1.7</build-helper-plugin-version>
