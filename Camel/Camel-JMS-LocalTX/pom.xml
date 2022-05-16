@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.camel.demo</groupId>
-  <artifactId>camel-jms-localtx-demo</artifactId>
+  <artifactId>camel-test</artifactId>
   <version>1.0</version>
-  <name>Camel JMS Local TX Demo</name>
+  <name>Camel Test</name>
   <packaging>bundle</packaging>
 
   <properties>
@@ -11,12 +11,26 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+  <!-- Fuse 6 BOM
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>org.jboss.fuse.bom</groupId>
         <artifactId>jboss-fuse-parent</artifactId>
         <version>6.3.0.redhat-416</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+-->
+  <!-- Fuse 7 BOM -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.jboss.redhat-fuse</groupId>
+        <artifactId>fuse-karaf-bom</artifactId>
+        <version>7.10.0.fuse-sb2-7_10_2-00001-redhat-00002</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -121,8 +135,8 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>2.3.2</version>
           <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
     </plugins>
