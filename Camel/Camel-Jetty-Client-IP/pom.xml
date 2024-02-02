@@ -30,7 +30,7 @@
      <camel-version>2.10.0</camel-version>
     <slf4j.version>1.6.6</slf4j.version>
     <junit-version>4.8</junit-version>
-    <spring.version>3.0.7.RELEASE</spring.version>
+    <spring.version>5.2.22.RELEASE</spring.version>
   </properties>
 
   <dependencies>
